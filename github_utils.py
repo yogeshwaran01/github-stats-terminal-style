@@ -3,10 +3,12 @@ import datetime
 import os
 
 import github
+from github.GithubException import GithubException
 
 GITHUB_TOKEN = os.environ.get("GHT")
 
-gh = github.Github("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")
+gh = github.Github(GITHUB_TOKEN)
+
 
 def align(number: int):
     """ Align the number regarding to templates"""
@@ -25,20 +27,33 @@ class UserStats:
         self.web = self.user.blog
         self.stars = sum([repo.stargazers_count for repo in self.user_repos])
         self.forks = sum([repo.forks_count for repo in self.user_repos])
-        self.commits = sum(
-            [
-                0 if repo.fork else repo.get_commits().totalCount
-                for repo in self.user_repos
-            ]
-        )
+        self.commits = self.get_commits()
         self.repos_count = len(list(self.user_repos))
         self.followers = self.user.followers
-        self.issues_created = len(list(gh.search_issues('', author=username, type='issue')))
-        self.pr_created = len(list(gh.search_issues('', author=username, type='pr')))
+        self.issues_created = len(
+            list(gh.search_issues("", author=username, type="issue"))
+        )
+        self.pr_created = len(list(gh.search_issues(
+            "", author=username, type="pr"
+        )))
         self.watching_repos = len(list(self.user.get_watched()))
         self.gists = len(list(self.user.get_gists()))
         self.hireable = self.user.hireable
         self.created_at = self.user.created_at
+
+    def get_commits(self):
+        repos = []
+        for repo in self.user_repos:
+            if repo.fork:
+                repos.append(0)
+            else:
+                try:
+                    repos.append(repo.get_commits().totalCount)
+                except GithubException:
+                    repos.append(0)
+
+        return sum(repos)
+
 
 def get_stats(username: str):
     """ Returns the stats data of the given username """
@@ -60,8 +75,8 @@ def get_stats(username: str):
             "pr",
             "watch",
             "gists",
-            'hire',
-            'uptime',
+            "hire",
+            "uptime",
         ],
     )
 
