@@ -4,6 +4,7 @@ chardet==4.0.0
 click==7.1.2
 Deprecated==1.2.12
 Flask==1.1.2
+gunicorn==20.1.0
 idna==2.10
 itsdangerous==1.1.0
 Jinja2==2.11.3
