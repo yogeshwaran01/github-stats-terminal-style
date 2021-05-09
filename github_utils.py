@@ -11,9 +11,24 @@ gh = github.Github(GITHUB_TOKEN)
 
 
 def align(number: int):
-    """ Align the number regarding to templates"""
+    """ Align the number regarding to template """
 
     return " " + str(number) + " " * (11 - len(str(number)))
+
+
+def align_username(user_name: str):
+    """ Align the username regarding to template """
+
+    if len(user_name) <= 5:
+        return str(user_name) + "@github.com"
+    elif len(user_name) <= 7:
+        return str(user_name) + "@github"
+    elif len(user_name) <= 10:
+        return str(user_name) + "@git"
+    elif len(user_name) > 16:
+        return user_name[:17]
+    else:
+        return user_name
 
 
 class UserStats:
@@ -83,7 +98,7 @@ def get_stats(username: str):
     user = UserStats(username)
 
     return stats(
-        username,
+        align_username(username),
         user.name,
         user.bio,
         user.web,
