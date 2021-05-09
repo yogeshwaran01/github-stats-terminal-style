@@ -3,6 +3,7 @@ from github.GithubException import RateLimitExceededException
 from github.GithubException import UnknownObjectException
 
 from github_utils import get_stats
+from github_utils import gh
 
 app = Flask(__name__)
 
@@ -20,5 +21,10 @@ def render_svg(username):
     return res
 
 
+@app.route('/api/rate')
+def render_ratelimt():
+    return jsonify({'rate-limit': gh.rate_limiting[0]})
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
