@@ -31,7 +31,7 @@ def render_ratelimt():
 
 @app.route('/api/themes')
 def render_themes():
-    return jsonify(THEMES.keys())
+    return jsonify(list(THEMES.keys()))
 
 
 if __name__ == "__main__":
