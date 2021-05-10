@@ -1,10 +1,8 @@
-from contextlib import contextmanager
-
 import pytest
 from flask import request
 
 from app import app
-from github_utils import get_stats
+
 
 @pytest.fixture
 def client():
