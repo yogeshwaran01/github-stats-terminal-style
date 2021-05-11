@@ -87,7 +87,7 @@ THEMES = {
         "purple": "#D33682",
         "orange": "#FEFE45",
         "cyan": "#EF2929",
-        "username": "#C2C1C3",
+        "username": "#F6F6F7",
     },
 }
 
