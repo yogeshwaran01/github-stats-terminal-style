@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from flask import Flask, jsonify, make_response, render_template, request
 from flask_compress import Compress
+from flask_cors import CORS
 from github.GithubException import RateLimitExceededException
 from github.GithubException import UnknownObjectException
 
@@ -10,6 +11,7 @@ from themes.themes import THEMES, get_theme
 
 app = Flask(__name__)
 compress = Compress(app)
+CORS(app)
 
 app.config["COMPRESS_MIMETYPES"] = ["image/svg+xml", "application/json"]
 
