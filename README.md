@@ -15,10 +15,10 @@
 <kbd>Ctrl</kbd> + <kbd>c</kbd> and <kbd>Ctrl</kbd> + <kbd>v</kbd> below content in your profile `README`. Change the `<username>` into your github username
 
 ```html
-<p align="center"><img align="center" src="https://github-stats-terminal-style.herokuapp.com/<username>" alt="stats"></p>
+<p align="center"><img align="center" src="https://github-stats-terminal-styles.herokuapp.com/<username>" alt="stats"></p>
 ```
 
-<p align="center"><img align="center" src="https://github-stats-terminal-style.herokuapp.com/yogeshwaran01" alt="stats"></p>
+<p align="center"><img align="center" src="https://github-stats-terminal-styles.herokuapp.com/yogeshwaran01" alt="stats"></p>
 
 
 ## Themes
@@ -26,7 +26,7 @@
 Now only Nine themes are only available. you can change the theme by
 
 ```md
-![github stats](https://github-stats-terminal-style.herokuapp.com/<username>?theme=<theme_name>)
+![github stats](https://github-stats-terminal-styles.herokuapp.com/<username>?theme=<theme_name>)
 ```
 
 - ubuntu
