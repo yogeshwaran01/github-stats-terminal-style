@@ -1,3 +1,5 @@
+import random
+
 THEMES = {
     "ubuntu": {
         "name": "ubuntu",
@@ -92,6 +94,9 @@ THEMES = {
 }
 
 
-def get_theme(theme):
-    default = THEMES.get("default")
-    return THEMES.get(theme, default)
+def get_theme(theme_name=None):
+
+    return THEMES.get(theme_name, THEMES.get(random.choice(list(THEMES.keys()))))
+
+
+available_themes = list(THEMES.keys())
