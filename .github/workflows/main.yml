@@ -1,0 +1,56 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Update Github Stats
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  schedule:
+    - cron: "6 * * * *"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Python setup
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with: 
+          python-version: '3.8'
+          architecture: 'x64'
+
+      # Install requirements
+      - name: Install requirements
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install -r requirements.txt
+          
+      - name: Github Configurations
+        run: |
+          git config --global user.name "Github Actions"
+          git config --global user.email "action@github.com"
+          git pull
+          
+      - name: Update Template
+        run: |
+          python3 update_stats.py
+        env:
+          GHT: ${{ secrets.GHT }}
+          
+      # Commiting
+      - name: commiting changed svg template
+        run: |
+          git add .
+          git commit -m "Github Stats updated 🎉" || echo
+          git push
