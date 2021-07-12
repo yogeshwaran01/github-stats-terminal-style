@@ -7,10 +7,7 @@
 
 ## Usage
 
-Create a New Repository using this Template or click [here](https://github.com/yogeshwaran01/github-stats-terminal-style/generate) to create.
- 
-
-`github_stats.svg` is updated svg image of your github stats. you can copy this link and use it any where. By default it update daily you can also can this by change the cron in `/.github/workflows/main.yml` by using [Cron Generator](https://crontab.guru/)
+Create a New Repository using this Template or click [here](https://github.com/yogeshwaran01/github-stats-terminal-style/generate) to create. `github_stats.svg` is svg image of your github stats. you can copy the link of the image and use it any where. By default it update daily at `2:47 UTC` you can also can this by change the cron in `/.github/workflows/main.yml` by using [Cron Generator](https://crontab.guru/).
 
 ## Themes
 
