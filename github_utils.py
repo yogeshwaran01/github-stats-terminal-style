@@ -48,9 +48,7 @@ class UserStats:
         self.issues_created = len(
             list(gh.search_issues("", author=username, type="issue"))
         )
-        self.pr_created = len(list(gh.search_issues(
-            "", author=username, type="pr"
-        )))
+        self.pr_created = len(list(gh.search_issues("", author=username, type="pr")))
         self.watching_repos = len(list(self.user.get_watched()))
         self.gists = len(list(self.user.get_gists()))
         self.hireable = self.user.hireable
