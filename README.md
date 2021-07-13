@@ -9,7 +9,7 @@
 
 1. Create a New Repository using this Template or click [here](https://github.com/yogeshwaran01/github-stats-terminal-style/generate) to create.
 2. Create the personal Acess token. Check this [link](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) to create personal access token.
-3. Add a New Repository secret to your repo. Name of the secret is must be `GHT` and valve is your personal access token. Checkout this [link](https://docs.github.com/en/actions/reference/encrypted-secrets) to now to add new repositiry secret.
+3. Add a New Repository secret to your repo. Name of the secret is must be `GHT` and valve is your personal access token. Checkout this [link](https://docs.github.com/en/actions/reference/encrypted-secrets) to add new repositiry secret.
 
 The File `github_stats.svg` is svg image of your github stats. you can copy the link of the image and use it any where. By default it update daily at `2:47 UTC` you can also can this by change the cron in `/.github/workflows/main.yml` by using [Cron Generator](https://crontab.guru/).
 
