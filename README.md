@@ -33,15 +33,17 @@ to this
 python3 update_stats.py ${{ github.repository_owner }} --theme <Theme Name>
 ```
 
-- ubuntu
-- dracula
-- monokai
-- atom
-- github
-- googledark
-- googlelight
-- powershell
-- default
+|                           **Theme Sample**                            | **Theme Name** |
+| :-------------------------------------------------------------------: | :------------: |
+|        <img align="center" src="./themes/atom.svg" alt="atom">        |      atom      |
+|     <img align="center" src="./themes/default.svg" alt="default">     |    default     |
+|     <img align="center" src="./themes/dracula.svg" alt="dracula">     |    dracula     |
+|      <img align="center" src="./themes/github.svg" alt="github">      |     github     |
+|  <img align="center" src="./themes/googledark.svg" alt="googledark">  |   googledark   |
+| <img align="center" src="./themes/googlelight.svg" alt="googlelight"> |  googlelight   |
+|     <img align="center" src="./themes/monokai.svg" alt="monokai">     |    monokai     |
+|  <img align="center" src="./themes/powershell.svg" alt="powershell">  |   powershell   |
+|      <img align="center" src="./themes/ubuntu.svg" alt="Ubuntu">      |    ubunutu     |
 
 Contributions, issue and pull requests are welcome
 
