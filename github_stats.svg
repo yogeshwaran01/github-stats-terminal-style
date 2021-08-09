@@ -75,23 +75,23 @@
             /* The colors defined below are the default 16 colors used for rendering text of the terminal. Adjust
                them as needed.
                gjm8 color theme (source: https://terminal.sexy/) */
-            .foreground {fill: #c5c8c6}
-            .background {fill: #161719}
+            .foreground {fill: #ffffff}
+            .background {fill: #300a24}
             .color0 {fill: #272822}
             .color1 {fill: #f92672}
-            .green {fill: #94fa36}
+            .green {fill: #ffffff}
             .color3 {fill: #f4bf75}
             .color4 {fill: #66d9ef}
-            .purple {fill: #b9b6fc}
-            .color6 {fill: #85befd}
+            .purple {fill: #ffffff}
+            .color6 {fill: #ffffff}
             .color7 {fill: #f8f8f2}
             .color8 {fill: #75715e}
             .color9 {fill: #fd971f}
-            .color10 {fill: #fd5ff1}
+            .color10 {fill: #5cbe09}
             .color11 {fill: #49483e}
-            .color12 {fill: #c5c8c6}
+            .color12 {fill: #ffffff}
             .color13 {fill: #f5f4f1}
-            .orange {fill: #f5ffa8}
+            .orange {fill: #ffffff}
             .color15 {fill: #f9f8f5}
         </style>
     </defs>
@@ -273,7 +273,7 @@
                 <text x="0" textLength="8" class="foreground">&#9553;</text>
                 <text x="8" textLength="120" class="purple"> Commits       </text>
                 <text x="128" textLength="8" class="foreground">&#9474;</text>
-                <text x="136" textLength="96" class="green"> 747        </text>
+                <text x="136" textLength="96" class="green"> 748        </text>
                 <text x="232" textLength="8" class="foreground">&#9553;</text>
             </g>
             <g id="g29">
@@ -363,7 +363,7 @@
                 <text x="144" textLength="64" class="foreground">$ uptime</text>
             </g>
             <g id="g42">
-                <text x="0" textLength="32" font-weight="bold" class="orange">421</text>
+                <text x="0" textLength="32" font-weight="bold" class="orange">422</text>
             </g>
             <g id="g43">
                 <text x="0" textLength="128" font-weight="bold" class="color10">yogeshwaran01</text>
