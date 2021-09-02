@@ -23,18 +23,17 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Python setup
+      # Node js setup
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: Use Node.js ${{ matrix.node-version }}
         with: 
-          python-version: '3.8'
-          architecture: 'x64'
+          node-version: ${{ matrix.node-version }}
+
 
       # Install requirements
       - name: Install requirements
         run: |
-          python3 -m pip install --upgrade pip setuptools wheel
-          python3 -m pip install -r requirements.txt
+          npm install
           
       - name: Github Configurations
         run: |
@@ -44,7 +43,7 @@ jobs:
           
       - name: Update Template
         run: |
-          python3 update_stats.py ${{ github.repository_owner }} 
+          node updater.js ${{ github.repository_owner }} ubuntu
         env:
           GHT: ${{ secrets.GHT }}
           
