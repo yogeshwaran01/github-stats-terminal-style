@@ -2,8 +2,10 @@ const { Octokit } = require("@octokit/rest");
 
 const { utils, align_username, align } = require("./utils")
 
+const token = process.env.GHT
+
 const octokit = new Octokit({
-    auth: "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",
+    auth: token,
     log: {
         debug: () => { },
         info: () => { },
