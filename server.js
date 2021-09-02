@@ -1,4 +1,3 @@
-const { checkPrime } = require("crypto");
 const express = require("express")
 const nunjucks = require('nunjucks')
 
