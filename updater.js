@@ -1,8 +1,8 @@
 const fs = require('fs')
 
 const nunjucks = require('nunjucks')
-const { GithubUser } = require('./github')
-const themes = require("./theme")
+const { GithubUser } = require('./api/github')
+const themes = require("./api/theme")
 
 nunjucks.configure({ autoescape: true })
 
