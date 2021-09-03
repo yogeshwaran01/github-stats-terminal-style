@@ -14,9 +14,9 @@ nunjucks.configure('', {
 
 app.set('view engine', 'svg')
 
-app.get("/:username", (req, res) => {
+app.get("/", (req, res) => {
 
-    let username = req.params.username
+    let username = req.query.username || "yogeshwaran01"
     let theme = req.query.theme || "ubuntu"
 
     let user = new GithubUser.GithubUser(username)
