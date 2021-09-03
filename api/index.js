@@ -11,6 +11,7 @@ nunjucks.configure('', {
     autoescape: true
 })
 
+
 app.set('view engine', 'svg')
 
 app.get("/:username", (req, res) => {
