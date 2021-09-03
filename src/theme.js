@@ -1,4 +1,4 @@
-const THEMES = require("./theme.json")
+const THEMES = require("./themes.json")
 
 const themes = Object.keys(THEMES);
 

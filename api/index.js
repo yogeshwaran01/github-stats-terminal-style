@@ -1,8 +1,8 @@
 const express = require("express")
 const nunjucks = require('nunjucks')
 
-const GithubUser = require("./github")
-const themes = require("./theme")
+const GithubUser = require("../src/github")
+const themes = require("../src/theme")
 
 const app = express();
 
