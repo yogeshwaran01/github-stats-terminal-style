@@ -9,7 +9,7 @@ nunjucks.configure({ autoescape: true })
 let templateString = fs.readFileSync("template.svg", 'utf-8')
 
 let username = process.argv[2]
-let req_theme = process.argv[3]
+let req_theme = process.argv[3] || "random"
 
 let user = new GithubUser(username);
 user.fetchContent()
