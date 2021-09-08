@@ -47,4 +47,3 @@ node updater.js ${{ github.repository_owner }} <themeName>
 
 Contributions, issue and pull requests are welcome
 
-<h3 align='center'>Made With Python :heart:</h3>
