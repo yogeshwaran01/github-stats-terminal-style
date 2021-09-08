@@ -1,6 +1,4 @@
-import random
-
-THEMES = {
+{
     "ubuntu": {
         "name": "ubuntu",
         "back": "#300a24",
@@ -9,7 +7,7 @@ THEMES = {
         "purple": "#ffffff",
         "orange": "#ffffff",
         "cyan": "#ffffff",
-        "username": "#5cbe09",
+        "username": "#5cbe09"
     },
     "default": {
         "name": "default",
@@ -19,7 +17,7 @@ THEMES = {
         "purple": "#ae81ff",
         "orange": "#cc6633",
         "cyan": "#8be9fd",
-        "username": "#f70202",
+        "username": "#f70202"
     },
     "dracula": {
         "name": "dracula",
@@ -29,7 +27,7 @@ THEMES = {
         "purple": "#bd93f9",
         "orange": "#ffb86c",
         "cyan": "#8be9fd",
-        "username": "#E356A7",
+        "username": "#E356A7"
     },
     "monokai": {
         "name": "monokai",
@@ -39,7 +37,7 @@ THEMES = {
         "purple": "#9e86c8",
         "orange": "#e87d3e",
         "cyan": "#8be9fd",
-        "username": "#f92672",
+        "username": "#f92672"
     },
     "atom": {
         "name": "atom",
@@ -49,7 +47,7 @@ THEMES = {
         "purple": "#b9b6fc",
         "orange": "#f5ffa8",
         "cyan": "#85befd",
-        "username": "#fd5ff1",
+        "username": "#fd5ff1"
     },
     "github": {
         "name": "github",
@@ -59,7 +57,7 @@ THEMES = {
         "purple": "#e94691",
         "orange": "#2e6cba",
         "cyan": "#666666",
-        "username": "#de0000",
+        "username": "#de0000"
     },
     "googledark": {
         "name": "googledark",
@@ -69,7 +67,7 @@ THEMES = {
         "purple": "#A142F4",
         "orange": "#FBBC05",
         "cyan": "#EA4335",
-        "username": "#4285F4",
+        "username": "#4285F4"
     },
     "googlelight": {
         "name": "googlelight",
@@ -79,7 +77,7 @@ THEMES = {
         "purple": "#A142F4",
         "orange": "#EA4335",
         "cyan": "#24C1E0",
-        "username": "#4285F4",
+        "username": "#4285F4"
     },
     "powershell": {
         "name": "powershell",
@@ -89,14 +87,6 @@ THEMES = {
         "purple": "#D33682",
         "orange": "#FEFE45",
         "cyan": "#EF2929",
-        "username": "#F6F6F7",
-    },
+        "username": "#F6F6F7"
+    }
 }
-
-
-def get_theme(theme_name=None):
-
-    return THEMES.get(theme_name, THEMES.get(random.choice(list(THEMES.keys()))))
-
-
-available_themes = list(THEMES.keys())
