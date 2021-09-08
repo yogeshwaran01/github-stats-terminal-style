@@ -24,13 +24,13 @@ you can change the theme by change the command in file `/.github/workflows/main.
 change
 
 ```bash
-python3 update_stats.py ${{ github.repository_owner }}
+node updater.js ${{ github.repository_owner }}
 ```
 
 to this
 
 ```bash
-python3 update_stats.py ${{ github.repository_owner }} --theme <Theme Name>
+node updater.js ${{ github.repository_owner }} <themeName>
 ```
 
 |                           **Theme Sample**                            | **Theme Name** |
