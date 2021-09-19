@@ -75,23 +75,23 @@
             /* The colors defined below are the default 16 colors used for rendering text of the terminal. Adjust
                them as needed.
                gjm8 color theme (source: https://terminal.sexy/) */
-            .foreground {fill: #F8F8F2}
-            .background {fill: #282A36}
+            .foreground {fill: #3e3e3e}
+            .background {fill: #f4f4f4}
             .color0 {fill: #272822}
             .color1 {fill: #f92672}
-            .green {fill: #50fa7b}
+            .green {fill: #87d5a2}
             .color3 {fill: #f4bf75}
             .color4 {fill: #66d9ef}
-            .purple {fill: #bd93f9}
-            .color6 {fill: #8be9fd}
+            .purple {fill: #e94691}
+            .color6 {fill: #666666}
             .color7 {fill: #f8f8f2}
             .color8 {fill: #75715e}
             .color9 {fill: #fd971f}
-            .color10 {fill: #E356A7}
+            .color10 {fill: #de0000}
             .color11 {fill: #49483e}
-            .color12 {fill: #F8F8F2}
+            .color12 {fill: #3e3e3e}
             .color13 {fill: #f5f4f1}
-            .orange {fill: #ffb86c}
+            .orange {fill: #2e6cba}
             .color15 {fill: #f9f8f5}
         </style>
     </defs>
@@ -363,7 +363,7 @@
                 <text x="144" textLength="64" class="foreground">$ uptime</text>
             </g>
             <g id="g42">
-                <text x="0" textLength="32" font-weight="bold" class="orange">463</text>
+                <text x="0" textLength="32" font-weight="bold" class="orange">464</text>
             </g>
             <g id="g43">
                 <text x="0" textLength="128" font-weight="bold" class="color10">yogeshwaran01</text>
