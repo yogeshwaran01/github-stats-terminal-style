@@ -1,6 +1,12 @@
 <h1 align='center'>GitHub Stats Terminal Style</h1>
 <p align='center'>Dynamically Generate GitHub Stats as like Terminal Interface </p>
 
+<p align="center" >
+  <a href="https://github.com/yogeshwaran01/github-stats-terminal-style/actions/workflows/main.yml">
+    <img src="https://github.com/yogeshwaran01/github-stats-terminal-style/actions/workflows/main.yml/badge.svg" alt="Update Github Stats" title="Terminal Style GitHub Stats">
+  </a>
+</p>
+
 <p align='center'>
   <img align="center" src="./github_stats.svg">
 </p>
@@ -15,23 +21,13 @@ The File `github_stats.svg` is svg image of your github stats. you can copy the 
 
 ## Themes
 
-Now only Nine themes are only available.
-
-By default random theme is assigned every day.
-
-you can change the theme by change the command in file `/.github/workflows/main.yml`
-
-change
-
-```bash
-node updater.js ${{ github.repository_owner }}
-```
-
-to this
+Now only Nine themes are only available. By default, ubuntu theme. you can change the theme by change the command in file `/.github/workflows/main.yml`.
 
 ```bash
 node updater.js ${{ github.repository_owner }} <themeName>
 ```
+For random theme, need not to mention any arguments
+
 
 |                           **Theme Sample**                            | **Theme Name** |
 | :-------------------------------------------------------------------: | :------------: |
