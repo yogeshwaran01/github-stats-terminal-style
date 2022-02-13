@@ -88,5 +88,15 @@
         "orange": "#FEFE45",
         "cyan": "#EF2929",
         "username": "#F6F6F7"
+    },
+    "hacker": {
+        "name": "hacker",
+        "back": "#000000",
+        "fore": "#00FF00",
+        "green": "#00FF00",
+        "purple": "#00FF00",
+        "orange": "#00FF00",
+        "cyan": "#00FF00",
+        "username": "#00FF00"
     }
 }
