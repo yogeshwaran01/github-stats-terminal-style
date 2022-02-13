@@ -45,7 +45,7 @@ jobs:
           
       - name: Update Template
         run: |
-          node updater.js ${{ github.repository_owner }} ubuntu
+          node updater.js ${{ github.repository_owner }} hacker
         env:
           GHT: ${{ secrets.GHT }}
           
