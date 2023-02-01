@@ -27,7 +27,7 @@ Currently only nine themes are available. The default theme is the ubuntu theme.
 node updater.js ${{ github.repository_owner }} <themeName>
 ```
 
-To use a random theme, leave out the third argument.
+To use a random theme, do not specify any arguments.
 
 |                           **Theme Sample**                            | **Theme Name** |         **Theme Sample**        |  **ThemeName** |
 | :-------------------------------------------------------------------: | :------------: | :------------------------------:| :-------------: |
