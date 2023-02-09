@@ -1,5 +1,5 @@
 <h1 align='center'>GitHub Stats Terminal Style</h1>
-<p align='center'>Dynamically Generate GitHub Stats as like Terminal Interface </p>
+<p align='center'>Dynamically generate GitHub stats looking like a Terminal Interface </p>
 
 <p align="center" >
   <a href="https://github.com/yogeshwaran01/github-stats-terminal-style/actions/workflows/main.yml">
@@ -13,21 +13,21 @@
 
 ## Usage
 
-1. Create a New Repository using this Template or click [here](https://github.com/yogeshwaran01/github-stats-terminal-style/generate) to create.
-2. Create the personal Acess token. Checkout this [link](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) to create personal access token.
-3. Add a New Repository secret to your repo. Name of the secret is must be `GHT` and value is your personal access token (PAT). Checkout this [link](https://docs.github.com/en/actions/reference/encrypted-secrets) to add new repositiry secret.
+1. Create a new repository using this template or click [here](https://github.com/yogeshwaran01/github-stats-terminal-style/generate) to create.
+2. Create the personal access token. Checkout this [link](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) to create a personal access token.
+3. Add a new repository secret to your repo. The name of the secret must be `GHT` and the value is your personal access token (PAT). Checkout this [link](https://docs.github.com/en/actions/reference/encrypted-secrets) to add a new repository secret.
 
-The File `github_stats.svg` is svg image of your github stats. you can copy the link of the image and use it any where. By default it update daily at `2:47 UTC` you can also can this by change the cron in `/.github/workflows/main.yml` by using [Cron Generator](https://crontab.guru/).
+The file `github_stats.svg` is an svg image of your github stats. You can copy the link of the image and use it anywhere. By default it updates daily at `2:47 UTC`. You can also change this by changing the cron in `/.github/workflows/main.yml` by using [Cron Generator](https://crontab.guru/).
 
 ## Themes
 
-Now only Nine themes are only available. By default, ubuntu theme. you can change the theme by change the command in file `/.github/workflows/main.yml`.
+Currently only nine themes are available. The default theme is the ubuntu theme. You can change the theme by changing the command in `/.github/workflows/main.yml`.
 
 ```bash
 node updater.js ${{ github.repository_owner }} <themeName>
 ```
 
-For random theme, need not to mention any arguments
+To use a random theme, do not specify any arguments.
 
 |                           **Theme Sample**                            | **Theme Name** |         **Theme Sample**        |  **ThemeName** |
 | :-------------------------------------------------------------------: | :------------: | :------------------------------:| :-------------: |
