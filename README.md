@@ -13,9 +13,16 @@
 
 ## Usage
 
-1. Create a new repository using this template or click [here](https://github.com/yogeshwaran01/github-stats-terminal-style/generate) to create.
+1. Create a new repository using this template or click [here](https://github.com/yogeshwaran01/github-stats-terminal-style/generate) to create. Please make sure this is not the same repo as your ReadMe.
 2. Create the personal access token. Checkout this [link](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) to create a personal access token.
 3. Add a new repository secret to your repo. The name of the secret must be `GHT` and the value is your personal access token (PAT). Checkout this [link](https://docs.github.com/en/actions/reference/encrypted-secrets) to add a new repository secret.
+4. Replace GITHUB_NAME in 'vercel.json' with your Github username.
+3. Create an account on [Vercel](https://vercel.com/).
+4. Create a project on Vercel by importing your repo. Deploy the website.
+5. In your ReadMe, add the following code, replacing 'VERCEL_DOMAIN_BASE' with your deployed Vercel website's base name.
+```&nbsp;<div align="center">
+  ![Github Stats](https://{VERCEL_DOMAIN_BASE}.app/github_stats.svg)
+</div>```
 
 The file `github_stats.svg` is an svg image of your github stats. You can copy the link of the image and use it anywhere. By default it updates daily at `2:47 UTC`. You can also change this by changing the cron in `/.github/workflows/main.yml` by using [Cron Generator](https://crontab.guru/).
 
