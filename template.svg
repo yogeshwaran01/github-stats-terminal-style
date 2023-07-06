@@ -299,7 +299,7 @@
             </g>
             <g id="g32">
                 <text x="0" textLength="8" class="foreground">&#9553;</text>
-                <text x="8" textLength="120" class="purple"> Repository    </text>
+                <text x="8" textLength="120" class="purple"> Repositories    </text>
                 <text x="128" textLength="8" class="foreground">&#9474;</text>
                 <text x="136" textLength="96" class="green">{{ data.repo }}</text>
                 <text x="232" textLength="8" class="foreground">&#9553;</text>
