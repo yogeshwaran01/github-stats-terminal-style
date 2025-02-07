@@ -20,10 +20,11 @@
 <details>
   <summary><b>&nbsp;&nbsp;More Details</b></summary>
   <br/>
-  <p ## 🔑 Authentication & Permissions  
-To allow GitHub Actions to commit and push changes, follow these steps:
+  <p> 
 
-### 📝 Setting Up Personal Access Token (PAT)  
+### 🔑 Authentication & Permissions  
+To allow GitHub Actions to commit and push changes, follow these steps:
+### Setting Up Personal Access Token (PAT)  
 1️⃣ Go to **Settings** → **Developer settings** → **Personal access tokens**.  
 2️⃣ Click on **Generate a new token (classic)**.  
 3️⃣ Select the required scopes:  
@@ -32,7 +33,7 @@ To allow GitHub Actions to commit and push changes, follow these steps:
  
 **⚠️ Important:** Copy the token as it will disappear once you leave the page.  
 
-### 🔒 Adding the Token as a Secret  
+### Adding the Token as a Secret  
 1️⃣ Go to **Repository Settings** → **Secrets and Variables** → **Actions**.  
 2️⃣ Click **New Repository Secret**.  
 3️⃣ Name it **GHT** and paste the copied PAT in the input box.  
@@ -40,7 +41,7 @@ To allow GitHub Actions to commit and push changes, follow these steps:
 
 **⚠️ Security Tip:** Never expose your PAT publicly. Store it securely as it grants repo modification permissions.  
 
-### ⚙️ Grant Workflow Permissions  
+### Grant Workflow Permissions  
 1️⃣ Go to your **GitHub Repository Settings**.  
 2️⃣ Navigate to **Actions** under **Code and Automation**.  
 3️⃣ Select **General** from the dropdown.  
@@ -50,13 +51,13 @@ To allow GitHub Actions to commit and push changes, follow these steps:
 
 ---  
 
-## ▶️ Running Workflows  
-🎯 **Manual Execution**  
+## Running Workflows  
+ **Manual Execution**  
 1️⃣ Navigate to the **Actions** tab in your repository.  
 2️⃣ Under **All Workflows**, select the `main.yml` file to run.  
 3️⃣ Click **Run Workflow** to manually trigger the workflow for testing.  
 
-⏳ **Automated Execution**  
+ **Automated Execution**  
 The workflows are scheduled to run **automatically at defined UTC times**.  
 After a successful run, your generated files can be embedded into your **README** file. 📄 </p>
 
