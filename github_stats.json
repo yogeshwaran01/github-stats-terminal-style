@@ -1,0 +1,76 @@
+{
+  "name": "YOGESHWARAN R",
+  "bio": null,
+  "repoCount": 44,
+  "gistCount": 8,
+  "followersCount": 63,
+  "totalStars": 684,
+  "totalForks": 135,
+  "commitCount": 1561,
+  "issueCount": 2,
+  "prCount": 69,
+  "uptime": {
+    "years": 5,
+    "days": 234,
+    "since": "Fri Jun 12 2020"
+  },
+  "top_repos": [
+    {
+      "name": "github-stats-terminal-style",
+      "stars": 288,
+      "forks": 51,
+      "language": "JavaScript"
+    },
+    {
+      "name": "instagramy",
+      "stars": 154,
+      "forks": 32,
+      "language": "Python"
+    },
+    {
+      "name": "maskurl",
+      "stars": 87,
+      "forks": 21,
+      "language": "Python"
+    },
+    {
+      "name": "spotify-playlist-to-youtube-playlist",
+      "stars": 52,
+      "forks": 6,
+      "language": "Python"
+    },
+    {
+      "name": "lyricy",
+      "stars": 36,
+      "forks": 3,
+      "language": "Python"
+    }
+  ],
+  "processes": [
+    {
+      "name": "github-stats-terminal-style",
+      "status": "RUNNING",
+      "lastActivity": "0 days ago"
+    },
+    {
+      "name": "yogan",
+      "status": "RUNNING",
+      "lastActivity": "15 days ago"
+    },
+    {
+      "name": "spotify-playlist-to-youtube-playlist",
+      "status": "IDLE",
+      "lastActivity": "83 days ago"
+    },
+    {
+      "name": "PowerHouse",
+      "status": "IDLE",
+      "lastActivity": "91 days ago"
+    },
+    {
+      "name": "yogeshwaran01.github.io",
+      "status": "IDLE",
+      "lastActivity": "99 days ago"
+    }
+  ]
+}
