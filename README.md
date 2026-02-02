@@ -8,7 +8,7 @@
 </p>
 
 <p align='center'>
-  <img align="center" src="./github_stats.svg">
+  <img align="center" src="./github_stats.svg?v=latest">
 </p>
 
 ## Usage
