@@ -68,26 +68,13 @@ The file `github_stats.svg` is an svg image of your github stats. You can copy t
 
 ## Themes
 
-Currently only nine themes are available. The default theme is the ubuntu theme. You can change the theme by changing the command in `/.github/workflows/main.yml`.
+The default theme is the atom theme. You can change the theme by changing the command in `/.github/workflows/main.yml`.
 
 ```bash
-node updater.js ${{ github.repository_owner }} <themeName>
+node dist/bin/github-stats-terminal.js ${{ github.repository_owner }} <themeName>
 ```
-
-To use a random theme, do not specify any arguments.
-
-|                           **Theme Sample**                            | **Theme Name** |         **Theme Sample**        |  **ThemeName** |
-| :-------------------------------------------------------------------: | :------------: | :------------------------------:| :-------------: |
-|      <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/ubuntu.svg" alt="ubuntu">      |     ubuntu     | <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/hacker.svg" alt="hacker">  |   hacker   |
-|        <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/atom.svg" alt="atom">        |      atom      | <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/googledark.svg" alt="googledark">  |   googledark   |
-|     <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/default.svg" alt="default">     |    default     | <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/googlelight.svg" alt="googlelight"> |  googlelight   |
-|     <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/dracula.svg" alt="dracula">     |    dracula     | <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/monokai.svg" alt="monokai">     |    monokai     |
-|      <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/github.svg" alt="github">      |     github     | <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/powershell.svg" alt="powershell">  |   powershell   |
 
 ## Contributions
 
 Contributions, issue and pull requests are welcome
 
-## Credits
-
-Svg Generated from [termtosvg](https://github.com/nbedos/termtosvg)

@@ -1,0 +1,8 @@
+{
+    "watch": [
+        "dist"
+    ],
+    "ext": "js",
+    "exec": "node dist/bin/github-stats-terminal.js",
+    "delay": "200"
+}

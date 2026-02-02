@@ -26,32 +26,39 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+        with:
+          persist-credentials: false 
+          fetch-depth: 0
+
+      - name: Use Node.js 20
         uses: actions/setup-node@v3
         with: 
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
           cache: 'npm'
 
       # Install requirements
       - name: Install requirements
         run: |
           npm install
-          
-      - name: Github Configurations
+
+      - name: Build
         run: |
-          git config --global user.name "Github Actions"
-          git config --global user.email "action@github.com"
-          git pull
+          npm run build
           
-      - name: Update Template
+      - name: Generate Terminal SVG
         run: |
-          node updater.js ${{ github.repository_owner }} atom
+          GHT=${{ secrets.GHT }} node dist/bin/github-stats-terminal.js ${{ github.repository_owner }} dracula
         env:
           GHT: ${{ secrets.GHT }}
           
       # Commiting
-      - name: commiting changed svg template
+      - name: Github Configurations
         run: |
-          git add .
-          git commit -m "Github Stats updated 🎉" || echo
-          git push
+          git config --global user.name "Github Actions"
+          git config --global user.email "action@github.com"
+
+      - name: commiting generated terminal SVG
+        run: |
+          git add github_stats.svg
+          git commit -m "Github Stats updated 🎉" || echo "No changes to commit"
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
