@@ -60,5 +60,5 @@ jobs:
       - name: commiting generated terminal SVG
         run: |
           git add github_stats.svg
-          git commit -m "Github Stats updated 🎉" || echo "No changes to commit"
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+          git commit -m "Github Stats updated 🎉" 
+          git push 
