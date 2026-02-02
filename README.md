@@ -1,5 +1,5 @@
 <h1 align='center'>GitHub Stats Terminal Style</h1>
-<p align='center'>Dynamically generate GitHub stats looking like a Terminal Interface </p>
+<p align='center'>Transform your GitHub Profile into a developer's workspace.</p>
 
 <p align="center" >
   <a href="https://github.com/yogeshwaran01/github-stats-terminal-style/actions/workflows/main.yml">
@@ -11,66 +11,72 @@
   <img align="center" src="./github_stats.svg?v=latest">
 </p>
 
-## Usage
 
-1. Fork this into a new repository.
-2. Create the personal access token. Checkout this [link](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) to create a personal access token.
-3. Add a new repository secret to your repo. The name of the secret must be `GHT` and the value is your personal access token (PAT). Checkout this [link](https://docs.github.com/en/actions/reference/encrypted-secrets) to add a new repository secret.
-4. Enable `Allow GitHub Actions to create and approve pull requests` in General Action Settings
+This repository generates a dynamic SVG card that displays your GitHub statistics with a **terminal interface aesthetic**. Unlike static images, this card features a slick **typing animation**, making your profile feel alive and active.
 
-### 🔑 Authentication & Permissions
+It is fully automated using GitHub Actions, so your stats are always up-to-date without any manual work.
 
-To allow GitHub Actions to commit and push changes, follow these steps:
+## ✨ Features
 
-### Setting Up Personal Access Token (PAT)
-
-1️⃣ Go to **Settings** → **Developer settings** → **Personal access tokens**.  
-2️⃣ Click on **Generate a new token (classic)**.  
-3️⃣ Select the required scopes:
-
-- ✅ `repo` → Full control of private repositories.
-- ✅ `workflow` → Allows GitHub Actions to trigger workflows.
-
-**⚠️ Important:** Copy the token as it will disappear once you leave the page.
-+++
-
-### Adding the Token as a Secret
-
-1️⃣ Go to **Repository Settings** → **Secrets and Variables** → **Actions**.  
-2️⃣ Click **New Repository Secret**.  
-3️⃣ Name it **GHT** and paste the copied PAT in the input box.  
-4️⃣ Save it.
-
-**⚠️ Security Tip:** Never expose your PAT publicly. Store it securely as it grants repo modification permissions.
-
-### Grant Workflow Permissions
-
-1️⃣ Go to your **GitHub Repository Settings**.  
-2️⃣ Navigate to **Actions** under **Code and Automation**.  
-3️⃣ Select **General** from the dropdown.  
-4️⃣ Scroll down to **Workflow Permissions**.  
-5️⃣ Choose **Read and write permissions**.  
-6️⃣ Save the settings. ✅
+- **📺 Terminal Aesthetic:** Mimics a real CLI environment.
+- **⌨️ Typing Animation:** Stats appear as if they are being typed in real-time.
+- **🎨 Multiple Themes:** Includes 10+ themes like Ubuntu, Dracula, Monokai, and Hacker.
+- **🔄 Fully Automated:** Updates daily via GitHub Actions.
+- **⚡ Lightweight:** Optimized SVG format for fast loading.
 
 ---
 
-## Running Workflows
+## 🚀 Setup Guide
 
-**Manual Execution**  
-1️⃣ Navigate to the **Actions** tab in your repository.  
-2️⃣ Under **All Workflows**, select the `main.yml` file to run.  
-3️⃣ Click **Run Workflow** to manually trigger the workflow for testing.
+Follow these steps to add this to your profile in less than 5 minutes.
 
-**Automated Execution**  
-The workflows are scheduled to run **automatically at defined UTC times**.  
-After a successful run, your generated files can be embedded into your **README** file. 📄 </p>
+### 1. Create a Repository
+You can either [fork this repository](https://github.com/yogeshwaran01/github-stats-terminal-style/fork) or use it as a template to create a new one.
 
-The file `github_stats.svg` is an svg image of your github stats. You can copy the link of the image and use it anywhere. By default it updates daily at `2:47 UTC`. You can also change this by changing the cron in `/.github/workflows/main.yml` by using [Cron Generator](https://crontab.guru/).
+### 2. Generate a Personal Access Token (PAT)
+To allow the script to read your stats and update the SVG, you need a GitHub Token.
 
-## Themes
+1. Go to **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**.
+2. Click **Generate new token (classic)**.
+3. Select the following scopes:
+   - ✅ `repo` (Full control of private repositories)
+   - ✅ `workflow` (Update GitHub Action workflows)
+4. Click **Generate token** and **copy it immediately**.
 
-The default theme is the `atom` theme. You can change the theme by changing the command in `/.github/workflows/main.yml`.
-Currently supported themes
+### 3. Add the Token as a Secret
+1. Go to your repository's **Settings** tab.
+2. Navigate to **Secrets and variables** → **Actions**.
+3. Click **New repository secret**.
+4. **Name:** `GHT`
+5. **Value:** Paste the token you copied in Step 2.
+6. Click **Add secret**.
+
+### 4. Enable Workflow Permissions
+1. Go to **Settings** → **Actions** → **General**.
+2. Scroll down to **Workflow permissions**.
+3. Select **Read and write permissions**.
+4. Click **Save**.
+
+### 5. Run the Workflow
+1. Go to the **Actions** tab in your repository.
+2. Click on the **Update Github Stats** workflow on the left.
+3. Click **Run workflow**.
+
+Once finished, a file named `github_stats.svg` will be generated in your repository!
+
+---
+
+## 🎨 Themes & Customization
+
+You can change the appearance of your terminal by modifying the workflow file.
+
+1. Open `.github/workflows/main.yml`.
+2. Look for the step running `node dist/bin/github-stats-terminal.js`.
+3. Change the command to use your desired theme:
+
+```bash
+node dist/bin/github-stats-terminal.js ${{ github.repository_owner }} <themeName>
+```
 
 |                                                             **Theme Sample**                                                             | **Theme Name** |                                                                **Theme Sample**                                                                | **ThemeName** |
 | :--------------------------------------------------------------------------------------------------------------------------------------: | :------------: | :--------------------------------------------------------------------------------------------------------------------------------------------: | :-----------: |
@@ -82,6 +88,35 @@ Currently supported themes
 node dist/bin/github-stats-terminal.js ${{ github.repository_owner }} <themeName>
 ```
 
-## Contributions
+## 📅 Scheduling Updates
 
-Contributions, issue and pull requests are welcome
+By default, the stats update every day at 02:47 UTC. To change this:
+
+1. Open .github/workflows/main.yml.
+2. Edit the cron line:
+
+```yaml
+on:
+  schedule:
+    # Runs every day at 2:47 UTC
+    - cron: '47 2 * * *'
+```
+
+You can use [crontab.guru](https://crontab.guru/) to generate a custom schedule.
+
+## 📦 Usage in Profile
+Once your `github_s❤️tats.svg` is generated, you can add it to your profile README.md or anywhere
+
+## 🤝 Contributing
+
+Contributions are welcome! If you want to add a new theme or feature:
+1. Fork the project.
+2. Create your feature branch (git checkout -b feature/AmazingTheme).
+3. Commit your changes.
+4. Open a Pull Request.
+
+## 📄 License
+This project is licensed under the [MIT License](https://github.com/yogeshwaran01/github-stats-terminal-style/blob/master/LICENSE).
+
+
+**Thank You ❤️**
