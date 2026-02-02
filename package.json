@@ -12,7 +12,7 @@
     "dev": "concurrently \"npm run build:watch\" \"nodemon\""
   },
   "bin": {
-    "github-stats-terminal": "dist/cli.js"
+    "github-stats-terminal": "dist/bin/github-stats-terminal.js"
   },
   "keywords": [
     "github",

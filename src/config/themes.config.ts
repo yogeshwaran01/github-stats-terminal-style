@@ -1,8 +1,12 @@
+import { Theme } from "../types/theme.types";
+
 /**
- * Predefined themes for terminal styling
+ * Collection of predefined terminal themes.
+ * Each theme defines background, foreground, cursor, and a 16-color ANSI palette.
  */
 export const THEMES = {
     dracula: {
+        name: "dracula",
         background: "#282a36",
         foreground: "#f8f8f2",
         cursor: "#f8f8f2",
@@ -14,6 +18,7 @@ export const THEMES = {
         }
     },
     ubuntu: {
+        name: "ubuntu",
         background: "#300a24",
         foreground: "#eeeeec",
         cursor: "#bbbbbb",
@@ -25,6 +30,7 @@ export const THEMES = {
         }
     },
     hacker: {
+        name: "hacker",
         background: "#000000",
         foreground: "#00ff00",
         cursor: "#00ff00",
@@ -36,6 +42,7 @@ export const THEMES = {
         }
     },
     atom: {
+        name: "atom",
         background: "#282c34",
         foreground: "#abb2bf",
         cursor: "#528bff",
@@ -47,6 +54,7 @@ export const THEMES = {
         }
     },
     powershell: {
+        name: "powershell",
         background: "#012456",
         foreground: "#cccccc",
         cursor: "#ffffff",
@@ -58,6 +66,7 @@ export const THEMES = {
         }
     },
     monokai: {
+        name: "monokai",
         background: "#272822",
         foreground: "#f8f8f2",
         cursor: "#f8f8f2",
@@ -69,6 +78,7 @@ export const THEMES = {
         }
     },
     github: {
+        name: "github",
         background: "#ffffff",
         foreground: "#24292e",
         cursor: "#24292e",
@@ -80,35 +90,8 @@ export const THEMES = {
         }
     }
 } as const satisfies Record<string, Theme>;
+
 /**
- * Type representing a hex color string
- */
-export type HexColor = `#${string}`;
-/**
- * Type representing ANSI color indices
- */
-type ANSIIndex =
-    | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7"
-    | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15";
-/**
- * Type representing ANSI colors mapped to hex color strings
- */
-export type ANSIColors = {
-    [key in ANSIIndex]: HexColor;
-};
-/**
- * Interface representing a theme
- */
-export interface Theme {
-    background: HexColor;
-    foreground: HexColor;
-    cursor: HexColor;
-    colors: ANSIColors;
-    bold?: HexColor;
-    fontSize?: number;
-    fontFamily?: string;
-}
-/**
- * Type representing the valid theme names
+ * Union type of all available theme names (e.g., 'dracula', 'ubuntu').
  */
 export type ThemeName = keyof typeof THEMES;
