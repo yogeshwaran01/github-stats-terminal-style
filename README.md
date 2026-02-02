@@ -68,13 +68,11 @@ The file `github_stats.svg` is an svg image of your github stats. You can copy t
 
 ## Themes
 
-Currently only nine themes are available. The default theme is the ubuntu theme. You can change the theme by changing the command in `/.github/workflows/main.yml`.
+The default theme is the ubuntu theme. You can change the theme by changing the command in `/.github/workflows/main.yml`.
 
 ```bash
-node updater.js ${{ github.repository_owner }} <themeName>
+node dist/bin/github-stats-terminal.js ${{ github.repository_owner }} <themeName>
 ```
-
-To use a random theme, do not specify any arguments.
 
 |                           **Theme Sample**                            | **Theme Name** |         **Theme Sample**        |  **ThemeName** |
 | :-------------------------------------------------------------------: | :------------: | :------------------------------:| :-------------: |

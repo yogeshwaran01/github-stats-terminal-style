@@ -3,6 +3,7 @@
 import path = require("path");
 import fs = require("fs");
 import { ThemeName } from "../src/config/themes.config";
+import { GitHubService } from "../src/services/GitHubService";
 import { TerminalService } from "../src/services/TerminalService";
 import { GithubUserStats } from "../src/types/github.types";
 import { NeoFetchInfo } from "../src/utils/formatter.utils";
@@ -33,8 +34,9 @@ async function main() {
 
     try {
         // 3. Fetch Data
-        //const stats = await githubService.getStats();
-        const stats: GithubUserStats = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "github_stats.json"), "utf-8"));
+        const githubService: GitHubService = new GitHubService(username, token);
+        const stats: GithubUserStats = await githubService.getStats();
+        //const stats: GithubUserStats = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "github_stats.json"), "utf-8"));
 
         // 4. Render Terminal Session
         const terminalService = new TerminalService({
