@@ -6,12 +6,11 @@
   "sourceType": "repo",
   "target": "yogeshwaran01/github-stats-terminal-style",
   "commands": [
-    "whoami",
     "neofetch",
     "languages",
-    "git-log",
-    "uptime",
-    "ps",
-    "exit"
-  ]
+    "git-log"
+  ],
+  "customCommands": {
+    "cat note.txt": "Thank you for visiting this repository"
+  }
 }
