@@ -50,7 +50,7 @@ jobs:
           
       - name: Generate Terminal SVG
         run: |
-          GHT=${{ secrets.GHT }} node dist/bin/github-stats-terminal.js ${{ github.repository_owner }} dracula
+          GHT=${{ secrets.GHT }} node dist/bin/github-stats-terminal.js ${{ github.repository_owner }}
         env:
           GHT: ${{ secrets.GHT }}
           

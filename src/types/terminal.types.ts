@@ -1,4 +1,4 @@
-import { ThemeName } from "../config/themes.config";
+import { ThemeName } from "../constants/themes.constants";
 
 /**
  * Configuration options for the Terminal session.
@@ -16,4 +16,8 @@ export interface TerminalConfig {
     width?: number;
     /** Custom height of the terminal window (default: 24). */
     height?: number;
+    /** The style of the terminal window header ('mac', 'windows', 'retro'). */
+    headerStyle?: 'mac' | 'windows' | 'retro';
+    /** Custom list of commands to run. */
+    commands?: string[];
 }

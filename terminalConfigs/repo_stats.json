@@ -1,0 +1,17 @@
+{
+  "theme": "tokyonight",
+  "headerStyle": "windows",
+  "hostname": "github.com",
+  "typingSpeed": 100,
+  "sourceType": "repo",
+  "target": "yogeshwaran01/github-stats-terminal-style",
+  "commands": [
+    "whoami",
+    "neofetch",
+    "languages",
+    "git-log",
+    "uptime",
+    "ps",
+    "exit"
+  ]
+}

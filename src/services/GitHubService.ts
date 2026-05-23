@@ -1,5 +1,5 @@
 import { Octokit } from "@octokit/rest";
-import { GithubRepo, GithubUserProfile, GithubUserStats, RepoStatus } from "../types/github.types";
+import { GithubRepo, GithubUserProfile, GithubUserStats, GithubRepoStats, RepoStatus } from "../types/github.types";
 import { calculateUptime } from "../utils/date.utils";
 
 /**
@@ -51,6 +51,7 @@ export class GitHubService {
             uptime: calculateUptime(user.created_at),
             top_repos: this.getTopRepos(repos),
             processes: this.getProcesses(repos),
+            languages: this.calculateLanguages(repos),
         };
     }
 
@@ -176,4 +177,96 @@ export class GitHubService {
                 };
             });
     }
+
+    /**
+     * Calculates programming language distribution based on repository counts.
+     * @param repos List of repositories.
+     * @returns Array of languages and their usage percentages.
+     */
+    private calculateLanguages(repos: GithubRepo[]) {
+        const langCounts: Record<string, number> = {};
+        let totalWithLanguage = 0;
+
+        for (const repo of repos) {
+            const lang = repo.language;
+            if (lang && lang !== "Unknown") {
+                langCounts[lang] = (langCounts[lang] || 0) + 1;
+                totalWithLanguage++;
+            }
+        }
+
+        if (totalWithLanguage === 0) {
+            return [];
+        }
+
+        return Object.entries(langCounts)
+            .map(([name, count]) => ({
+                name,
+                percentage: Math.round((count / totalWithLanguage) * 100),
+            }))
+            .sort((a, b) => b.percentage - a.percentage)
+            .slice(0, 5);
+    }
+
+    /**
+     * Fetches and aggregates statistics for a single repository.
+     * @param owner The owner/namespace of the repository.
+     * @param repoName The name of the repository.
+     * @returns A promise resolving to the GithubRepoStats object.
+     */
+    public async getRepoStats(owner: string, repoName: string): Promise<GithubRepoStats> {
+        const [repoData, languagesData, commitsData] = await Promise.all([
+            this.octokit.repos.get({ owner, repo: repoName }),
+            this.octokit.repos.listLanguages({ owner, repo: repoName }),
+            this.octokit.repos.listCommits({ owner, repo: repoName, per_page: 5 }),
+        ]);
+
+        const repo = repoData.data;
+        const languages = this.calculateRepoLanguages(languagesData.data as Record<string, number>);
+        
+        const recentCommits = (commitsData.data || []).map((c: any) => ({
+            sha: c.sha.slice(0, 7),
+            author: c.commit.author?.name || c.author?.login || "Unknown",
+            date: c.commit.author?.date 
+                ? new Date(c.commit.author.date).toLocaleDateString()
+                : "Unknown",
+            message: c.commit.message.split('\n')[0].slice(0, 50),
+        }));
+
+        return {
+            name: repo.name,
+            fullName: repo.full_name,
+            description: repo.description,
+            stars: repo.stargazers_count ?? 0,
+            forks: repo.forks_count ?? 0,
+            watchers: repo.watchers_count ?? 0,
+            openIssues: repo.open_issues_count ?? 0,
+            size: repo.size ?? 0,
+            license: repo.license?.name ?? repo.license?.spdx_id ?? null,
+            createdAt: repo.created_at,
+            pushedAt: repo.pushed_at || repo.updated_at,
+            uptime: calculateUptime(repo.created_at),
+            languages,
+            recentCommits
+        };
+    }
+
+    /**
+     * Aggregates a single repository's language breakdown into percentages.
+     * @param langBytes Object mapping language names to code sizes in bytes.
+     * @returns Array of sorted language percentage contributions.
+     */
+    private calculateRepoLanguages(langBytes: Record<string, number>) {
+        const entries = Object.entries(langBytes);
+        const totalBytes = entries.reduce((sum, [_, bytes]) => sum + bytes, 0);
+        if (totalBytes === 0) return [];
+        return entries
+            .map(([name, bytes]) => ({
+                name,
+                percentage: Math.round((bytes / totalBytes) * 100),
+            }))
+            .sort((a, b) => b.percentage - a.percentage)
+            .slice(0, 5);
+    }
 }
+

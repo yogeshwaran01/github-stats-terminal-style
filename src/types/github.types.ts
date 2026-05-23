@@ -89,4 +89,57 @@ export interface GithubUserStats {
         status: RepoStatus;
         lastActivity: string;
     }>;
+    /** List of top languages with their percentage usage. */
+    languages: Array<{
+        name: string;
+        percentage: number;
+    }>;
 }
+
+/**
+ * Represents faked stats details for a single repository.
+ */
+export interface GithubRepoStats {
+    /** The repository name. */
+    name: string;
+    /** The full name including owner namespace (e.g. owner/repo). */
+    fullName: string;
+    /** The description of the repository. */
+    description: string | null;
+    /** Star count. */
+    stars: number;
+    /** Fork count. */
+    forks: number;
+    /** Watchers count. */
+    watchers: number;
+    /** Open issues count. */
+    openIssues: number;
+    /** Repository size in kilobytes. */
+    size: number;
+    /** License name. */
+    license: string | null;
+    /** Creation date string (ISO 8601). */
+    createdAt: string;
+    /** Last push date string (ISO 8601). */
+    pushedAt: string;
+    /** Uptime duration since creation. */
+    uptime: {
+        years: number;
+        days: number;
+        since: string;
+    };
+    /** Language percentage breakdown of the single repository. */
+    languages: Array<{
+        name: string;
+        percentage: number;
+    }>;
+    /** Top 5 most recent commit histories. */
+    recentCommits: Array<{
+        sha: string;
+        author: string;
+        date: string;
+        message: string;
+    }>;
+}
+
+
