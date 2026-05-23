@@ -62,6 +62,6 @@ jobs:
 
       - name: commiting generated terminal SVG
         run: |
-          git add github_stats.svg
+          git add --all -- :!package-lock.json
           git commit -m "Github Stats updated 🎉" 
           git push 
