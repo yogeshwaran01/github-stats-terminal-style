@@ -52,7 +52,7 @@ This generates stats for your overall GitHub user account (commits, issues, PRs,
 This generates stats for a single repository (stars, forks, watchers, open issues, repository size, license, precise repository language byte breakdown, and the 5 most recent commit logs!).
 
 1. Follow the same steps as above to create the repository, PAT, secrets, and permissions.
-2. Create a configuration file named `.github-stats-config.json` in the root of your repository.
+2. Add a configuration file named `your_repo.json` in the terminalConfig folder.
 3. Configure it as follows to target your repository:
    ```json
    {
@@ -63,13 +63,17 @@ This generates stats for a single repository (stars, forks, watchers, open issue
      "commands": ["whoami", "neofetch", "languages", "git-log", "uptime", "ps", "exit"]
    }
    ```
-4. Run the workflow. It will automatically detect the repo configuration and generate the repository SVG!
-
+4. Update the workflow, without any args
+   ```
+      - name: Generate Terminal SVG
+        run: |
+          GHT=${{ secrets.GHT }} node dist/bin/github-stats-terminal.js 
+        env:
+          GHT: ${{ secrets.GHT }}
+   ```
+6. Run the workflow. It will automatically detect the repo configuration and generate the repository SVG!
+7. You can add mutiple config in terminal folder, to cretate bulk SVG terminals.
 ---
-
-## 🎛️ Customizable Features
-
-You can fully customize your terminal window appearance and command behaviors by creating a `.github-stats-config.json` in your repository root.
 
 ### ⚙️ Configuration Properties
 
@@ -129,14 +133,7 @@ You can build the TypeScript files using the compiler scripts:
 - **One-time build:** `npm run build` (compiles source into `/dist`)
 - **Watch mode:** `npm run build:watch` (automatically rebuilds as you edit files)
 
-### 4. Running Offline Visual Tests
-Validate visual layout alignment and theme colors offline using mock repository stats data without calling live GitHub APIs:
-```bash
-npx ts-node test_graphics.ts
-```
-This generates a decorated SVG file `github_stats.svg` in your project root which you can open and inspect.
-
-### 5. Running CLI Manually
+### 4. Running CLI Manually
 To execute the stats generator engine manually (requires an active GitHub PAT set in the `GHT` environment variable):
 
 * **Direct Username Positional (User Profile Mode):**
