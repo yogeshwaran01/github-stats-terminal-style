@@ -1,5 +1,5 @@
-<h1 align='center'>GitHub Stats Terminal Style</h1>
-<p align='center'>Transform your GitHub Profile into a developer's workspace.</p>
+<h1 align='center'>📺 GitHub Stats Terminal Style</h1>
+<p align='center'>Transform your GitHub Profile or Repository Readme into a dynamic, animated developer's terminal workspace.</p>
 
 <p align="center" >
   <a href="https://github.com/yogeshwaran01/github-stats-terminal-style/actions/workflows/main.yml">
@@ -11,112 +11,182 @@
   <img align="center" src="./github_stats.svg?v=latest">
 </p>
 
-
-This repository generates a dynamic SVG card that displays your GitHub statistics with a **terminal interface aesthetic**. Unlike static images, this card features a slick **typing animation**, making your profile feel alive and active.
+This repository generates a dynamic SVG card that displays your GitHub statistics with a **premium terminal interface aesthetic**. Unlike static images, this card features a slick **typing animation**, making your profile feel alive and active.
 
 It is fully automated using GitHub Actions, so your stats are always up-to-date without any manual work.
 
-## ✨ Features
+---
 
-- **📺 Terminal Aesthetic:** Mimics a real CLI environment.
-- **⌨️ Typing Animation:** Stats appear as if they are being typed in real-time.
-- **🎨 Multiple Themes:** Includes 10+ themes like Ubuntu, Dracula, Monokai, and Hacker.
-- **🔄 Fully Automated:** Updates daily via GitHub Actions.
-- **⚡ Lightweight:** Optimized SVG format for fast loading.
+## ✨ Complete Features
+
+- **📺 Terminal Aesthetic:** Mimics a high-fidelity console shell environment with clean borders, title bars, and command prompts.
+- **⌨️ Typing Animation:** Commands are simulated typing character-by-character in real-time, followed by responsive output printing.
+- **🎨 Curated Theme Palettes:** Choose from 10+ professional developer themes (e.g. Tokyonight, Dracula, Catppuccin, Monokai, Nord).
+- **📐 Dynamic Window Scaling (No Truncation):** Auto-scales the SVG height dynamically based on the exact line count written. Large outputs (like long git logs) will never be cut off or truncated!
+- **🔄 Fully Automated:** Set up once and run daily on a cron schedule via GitHub Actions to keep stats fresh.
+- **⚡ Lightweight & Responsive:** Highly optimized SVG format utilizing pure CSS keyframes for minimal load times.
+- **📂 Bulk Configuration Engine:** Support for rendering multiple SVGs at once. Place multiple JSON configuration files inside a `terminalConfigs/` directory, and the tool will batch-generate all of them into a dedicated `terminals/` folder!
 
 ---
 
-## 🚀 Setup Guide
+## 🛠️ Easy Setup Guide (You or Your Repositories)
 
-Follow these steps to add this to your profile in less than 5 minutes.
+### Option A: Setup for your Profile (User Stats)
+This generates stats for your overall GitHub user account (commits, issues, PRs, followers, language breakdown, and top repositories).
 
-### 1. Create a Repository
-You can either [fork this repository](https://github.com/yogeshwaran01/github-stats-terminal-style/fork) or use it as a template to create a new one.
+1. **Fork or Template:** [Fork this repository](https://github.com/yogeshwaran01/github-stats-terminal-style/fork) or use it as a template to create a new repository.
+2. **Generate classic Personal Access Token (PAT):**
+   - Navigate to **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**.
+   - Generate a new classic token with the ✅ `repo` and ✅ `workflow` scopes. Copy it immediately.
+3. **Add Token as Secret:**
+   - Go to your new repository's **Settings** → **Secrets and variables** → **Actions**.
+   - Add a new repository secret named `GHT` and paste your token as the value.
+4. **Enable Workflow Permissions:**
+   - Go to **Settings** → **Actions** → **General** → **Workflow permissions**.
+   - Select **Read and write permissions** and click **Save**.
+5. **Execute:**
+   - Navigate to the **Actions** tab, click **Update Github Stats** workflow on the left, and click **Run workflow**. 
+   - A file named `github_stats.svg` will be generated in your repository root!
 
-### 2. Generate a Personal Access Token (PAT)
-To allow the script to read your stats and update the SVG, you need a GitHub Token.
+### Option B: Setup for a Specific Repository (Single Repo Stats)
+This generates stats for a single repository (stars, forks, watchers, open issues, repository size, license, precise repository language byte breakdown, and the 5 most recent commit logs!).
 
-1. Go to **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**.
-2. Click **Generate new token (classic)**.
-3. Select the following scopes:
-   - ✅ `repo` (Full control of private repositories)
-   - ✅ `workflow` (Update GitHub Action workflows)
-4. Click **Generate token** and **copy it immediately**.
-
-### 3. Add the Token as a Secret
-1. Go to your repository's **Settings** tab.
-2. Navigate to **Secrets and variables** → **Actions**.
-3. Click **New repository secret**.
-4. **Name:** `GHT`
-5. **Value:** Paste the token you copied in Step 2.
-6. Click **Add secret**.
-
-### 4. Enable Workflow Permissions
-1. Go to **Settings** → **Actions** → **General**.
-2. Scroll down to **Workflow permissions**.
-3. Select **Read and write permissions**.
-4. Click **Save**.
-
-### 5. Run the Workflow
-1. Go to the **Actions** tab in your repository.
-2. Click on the **Update Github Stats** workflow on the left.
-3. Click **Run workflow**.
-
-Once finished, a file named `github_stats.svg` will be generated in your repository!
+1. Follow the same steps as above to create the repository, PAT, secrets, and permissions.
+2. Create a configuration file named `.github-stats-config.json` in the root of your repository.
+3. Configure it as follows to target your repository:
+   ```json
+   {
+     "sourceType": "repo",
+     "target": "your-username/your-repository-name",
+     "theme": "tokyonight",
+     "headerStyle": "windows",
+     "commands": ["whoami", "neofetch", "languages", "git-log", "uptime", "ps", "exit"]
+   }
+   ```
+4. Run the workflow. It will automatically detect the repo configuration and generate the repository SVG!
 
 ---
 
-## 🎨 Themes & Customization
+## 🎛️ Customizable Features
 
-You can change the appearance of your terminal by modifying the workflow file.
+You can fully customize your terminal window appearance and command behaviors by creating a `.github-stats-config.json` in your repository root.
 
-1. Open `.github/workflows/main.yml`.
-2. Look for the step running `node dist/bin/github-stats-terminal.js`.
-3. Change the command to use your desired theme:
+### ⚙️ Configuration Properties
 
+| Property | Type | Description | Default |
+| :--- | :--- | :--- | :--- |
+| `sourceType` | `string` | Data ingestion source: `"user"` (GitHub profile stats) or `"repo"` (specific repository stats). | `"user"` |
+| `target` | `string` | Profile username or `owner/repo` string path representing the stats target. | *Defaults to username* |
+| `theme` | `string` | Visual color palette (see themes below). | `"dracula"` |
+| `headerStyle` | `string` | Terminal title bar decoration: `mac` (dots), `windows` (icons), or `retro` (borderless). | `"mac"` |
+| `hostname` | `string` | Custom hostname printed in prompt (e.g. `user@hostname`). | `"github.com"` |
+| `typingSpeed` | `number` | Time in milliseconds per simulated character typed. | `100` |
+| `commands` | `string[]` | Ordered list of commands to run (see supported command list below). | `["whoami", "neofetch", "languages", "top-repos", "ps", "uptime", "exit"]` |
+| `customCommands` | `object` | Key-value pairs mapping custom CLI strings to mock faked text outputs. | `{}` |
+
+### 🐚 Supported Terminal Commands
+
+* **`whoami`**: Prints the profile full name (user mode) or full repository namespace (repo mode).
+* **`neofetch`**: Displays a custom NeoFetch-style graphic with the target profile/repo statistics and custom GitHub ASCII logo.
+* **`languages`**: Renders a beautiful horizontal ASCII progress bar breakdown of top used languages.
+* **`git-log`**: *(Repo context only)* Renders the 5 most recent commits on the current branch (SHA hash, author, date, and commit message) with classic Git color accents.
+* **`top-repos`**: *(User context only)* Generates a CLI-styled data table listing your top 5 repositories sorted by stargazers.
+* **`ps`**: Renders a faked Linux process status monitor showing active repositories as system processes.
+* **`uptime`**: Prints faked system uptime calculated from the account or repository creation date.
+* **`exit`**: Gracefully simulates shell session exit.
+* **Custom Commands**: Any custom string (e.g., `cat bio.txt`) mapping directly to static text outputs specified in `customCommands`.
+
+### 🎨 Available Themes
+
+| Theme Name | Background | Foreground | Theme Name | Background | Foreground |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **dracula** | `#282a36` | `#f8f8f2` | **catppuccin** | `#24273a` | `#cad3f5` |
+| **ubuntu** | `#300a24` | `#eeeeec` | **nord** | `#2e3440` | `#d8dee9` |
+| **hacker** | `#000000` | `#00ff00` | **gruvbox** | `#282828` | `#ebdbb2` |
+| **powershell**| `#012456` | `#cccccc` | **tokyonight** | `#1a1b26` | `#a9b1d6` |
+| **monokai** | `#272822` | `#f8f8f2` | **github** | `#ffffff` | `#24292e` |
+
+---
+
+## 💻 Developer Setup Guide (Dev & Contribution)
+
+To compile, extend, or run this project locally on your machine:
+
+### 1. Prerequisites
+- [Node.js](https://nodejs.org/) (v16+)
+- [npm](https://www.npmjs.com/)
+
+### 2. Installation
+Clone the repository and install developer dependencies:
 ```bash
-node dist/bin/github-stats-terminal.js ${{ github.repository_owner }} <themeName>
+git clone https://github.com/yogeshwaran01/github-stats-terminal-style.git
+cd github-stats-terminal-style
+npm install
 ```
 
-|                                                             **Theme Sample**                                                             | **Theme Name** |                                                                **Theme Sample**                                                                | **ThemeName** |
-| :--------------------------------------------------------------------------------------------------------------------------------------: | :------------: | :--------------------------------------------------------------------------------------------------------------------------------------------: | :-----------: |
-|  <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/ubuntu.svg" alt="ubuntu">  |     ubuntu     |     <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/hacker.svg" alt="hacker">     |    hacker     |
-| <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/dracula.svg" alt="dracula"> |    dracula     |    <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/monokai.svg" alt="monokai">    |    monokai    |
-|  <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/github.svg" alt="github">  |     github     | <img align="center" src="https://cdn.jsdelivr.net/gh/yogeshwaran01/github-stats-terminal-style@latest/themes/powershell.svg" alt="powershell"> |  powershell   |
+### 3. Local Development Build
+You can build the TypeScript files using the compiler scripts:
+- **One-time build:** `npm run build` (compiles source into `/dist`)
+- **Watch mode:** `npm run build:watch` (automatically rebuilds as you edit files)
 
+### 4. Running Offline Visual Tests
+Validate visual layout alignment and theme colors offline using mock repository stats data without calling live GitHub APIs:
 ```bash
-node dist/bin/github-stats-terminal.js ${{ github.repository_owner }} <themeName>
+npx ts-node test_graphics.ts
 ```
+This generates a decorated SVG file `github_stats.svg` in your project root which you can open and inspect.
+
+### 5. Running CLI Manually
+To execute the stats generator engine manually (requires an active GitHub PAT set in the `GHT` environment variable):
+
+* **Direct Username Positional (User Profile Mode):**
+  ```bash
+  GHT="your_github_token" npx ts-node bin/github-stats-terminal.ts your-github-username
+  ```
+  *(Always resolves to user profile stats mode for `your-github-username`.)*
+* **Explicit User Profile Flag (`--user`):**
+  ```bash
+  GHT="your_github_token" npx ts-node bin/github-stats-terminal.ts --user your-github-username
+  ```
+  *(Explicitly runs user profile stats mode for `your-github-username`.)*
+* **Explicit Repository Flag (`--repo`):**
+  ```bash
+  GHT="your_github_token" npx ts-node bin/github-stats-terminal.ts --repo owner/repository-name
+  ```
+  *(Explicitly runs repository stats mode for `owner/repository-name`.)*
+* **Explicit Bulk Configurations Flag (`--bulk`):**
+  ```bash
+  GHT="your_github_token" npx ts-node bin/github-stats-terminal.ts --bulk
+  ```
+  *(Processes all configuration files in `terminalConfigs/` and saves output SVGs inside the `terminals/` folder.)*
+* **No Arguments (Zero Options):**
+  ```bash
+  GHT="your_github_token" npx ts-node bin/github-stats-terminal.ts
+  ```
+  *(Smart fallback: Automatically defaults to `--bulk` mode if the `terminalConfigs/` directory exists and has JSON configuration files. Otherwise, displays the help usage menu.)*
+
+---
 
 ## 📅 Scheduling Updates
 
-By default, the stats update every day at 02:47 UTC. To change this:
-
-1. Open .github/workflows/main.yml.
-2. Edit the cron line:
-
-```yaml
-on:
-  schedule:
-    # Runs every day at 2:47 UTC
-    - cron: '47 2 * * *'
-```
-
-You can use [crontab.guru](https://crontab.guru/) to generate a custom schedule.
-
-## 📦 Usage in Profile
-Once your `github_s❤️tats.svg` is generated, you can add it to your profile README.md or anywhere
+By default, the stats update every day at 02:47 UTC. To customize this schedule:
+1. Open `.github/workflows/main.yml`.
+2. Edit the crontab expression inside the schedule triggers:
+   ```yaml
+   on:
+     schedule:
+       - cron: '47 2 * * *'
+   ```
 
 ## 🤝 Contributing
 
 Contributions are welcome! If you want to add a new theme or feature:
 1. Fork the project.
-2. Create your feature branch (git checkout -b feature/AmazingTheme).
+2. Create your feature branch (`git checkout -b feature/AmazingTheme`).
 3. Commit your changes.
 4. Open a Pull Request.
 
 ## 📄 License
 This project is licensed under the [MIT License](https://github.com/yogeshwaran01/github-stats-terminal-style/blob/master/LICENSE).
-
 
 **Thank You ❤️**

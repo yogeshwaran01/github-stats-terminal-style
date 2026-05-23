@@ -1,9 +1,10 @@
 import { render as renderTerminal, SvgTermColor, SvgTermOptions } from "svg-term";
-import { ANSI } from "../config/ansi.config";
-import { ThemeName, THEMES } from "../config/themes.config";
+import { ANSI } from "../constants/ansi.constants";
+import { ThemeName, THEMES } from "../constants/themes.constants";
 import { TerminalConfig } from "../types/terminal.types";
 import { Theme } from "../types/theme.types";
-import { renderChart, renderList, renderNeoFetch, renderTable } from "../utils/formatter.utils";
+import { TerminalGraphicsEngine } from "../graphicsEngine/TerminalGraphicsEngine";
+import { TerminalGraphicsType, GraphicsDataContract } from "../types/graphics.types";
 
 /**
  * Service to orchestrate terminal session recording and SVG generation.
@@ -14,6 +15,7 @@ export class TerminalService {
     private events: Array<any> = [];
     private currentTime: number = 0;
     private theme: Theme;
+    private lineCount: number = 0;
 
     /**
      * Initializes a new instance of the TerminalService.
@@ -35,7 +37,7 @@ export class TerminalService {
      * @param outputType The format of the output ("text", "table", "chart", "neoFetch", "list").
      * @returns The TerminalService instance for method chaining.
      */
-    public addCommand(commandText: string, outputData: any, outputType: string = "text") {
+    public addCommand(commandText: string, outputData: GraphicsDataContract, outputType: TerminalGraphicsType = "text") {
         const prompt = this.createPrompt();
         this.record(prompt);
         this.wait(0.2);
@@ -54,10 +56,14 @@ export class TerminalService {
      * @returns The generated SVG code.
      */
     public render(): string {
+        // Automatically scale height based on exact line count written to fit perfectly without cutoffs!
+        const calculatedHeight = Math.max(16, this.lineCount + 3);
+        this.options.height = calculatedHeight;
+
         const header = {
             version: 2,
             width: this.options.width || 80,
-            height: this.options.height || 24,
+            height: this.options.height,
             timestamp: Date.now(),
             env: { TERM: "xterm-256color" }
         };
@@ -92,10 +98,11 @@ export class TerminalService {
      * @returns SvgTermOptions object.
      */
     private prepareHeader(): SvgTermOptions {
+        const isRetro = this.options.headerStyle === 'retro';
         return {
             width: this.options.width || 80,
             height: this.options.height || 20,
-            window: true,
+            window: !isRetro,
             cursor: true,
             theme: this.getThemeObject(this.options.theme || "dracula"),
             to: this.events.length > 0 ? this.events[this.events.length - 1][0] : 0,
@@ -113,43 +120,22 @@ export class TerminalService {
         });
     }
 
-    /**
-     * Formats output data based on the requested type.
-     * @param outputData Raw data (object, array, or string).
-     * @param outputType The formatter to use ("table", "chart", etc.).
-     * @returns The formatted string ready for the terminal.
-     */
-    private prepareFormattedOutput(outputData: any, outputType: string): string {
-        let formattedOutput = "";
-        // Inject theme if needed by the renderer
-        if (outputType !== "text" && typeof outputData === 'object' && outputData !== null) {
-            outputData.theme = this.theme;
-        }
-
-        switch (outputType) {
-            case 'table':
-                formattedOutput = renderTable(outputData);
-                break;
-            case 'chart':
-                formattedOutput = renderChart(outputData);
-                break;
-            case 'list':
-                formattedOutput = renderList(outputData);
-                break;
-            case 'neoFetch':
-                formattedOutput = renderNeoFetch(outputData);
-                break;
-            default:
-                formattedOutput = typeof outputData === 'string' ? outputData : JSON.stringify(outputData, null, 2);
-        }
-        return formattedOutput;
+    private prepareFormattedOutput(outputData: GraphicsDataContract, outputType: TerminalGraphicsType): string {
+        return TerminalGraphicsEngine.format(outputData, outputType, this.theme);
     }
+
 
     /**
      * Pushes a single event frame to the events list.
      * @param data The data (usually a string char or escape code) to record.
      */
     private record(data: any) {
+        if (typeof data === "string") {
+            const matches = data.match(/\n/g);
+            if (matches) {
+                this.lineCount += matches.length;
+            }
+        }
         this.events.push([this.currentTime, "o", data]);
     }
 
@@ -207,3 +193,5 @@ export class TerminalService {
         };
     }
 }
+
+

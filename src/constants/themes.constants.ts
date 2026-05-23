@@ -88,8 +88,57 @@ export const THEMES = {
             "8": "#959da5", "9": "#cb2431", "10": "#22863a", "11": "#b08800",
             "12": "#005cc5", "13": "#5a32a3", "14": "#3192aa", "15": "#d1d5da"
         }
+    },
+    catppuccin: {
+        name: "catppuccin",
+        background: "#24273a",
+        foreground: "#cad3f5",
+        cursor: "#f4dbd6",
+        colors: {
+            "0": "#494d64", "1": "#ed8796", "2": "#a6da95", "3": "#eed49f",
+            "4": "#8aadf4", "5": "#f5bde6", "6": "#8bd5ca", "7": "#b8c0e0",
+            "8": "#5b6078", "9": "#ed8796", "10": "#a6da95", "11": "#eed49f",
+            "12": "#8aadf4", "13": "#f5bde6", "14": "#8bd5ca", "15": "#a5adcb"
+        }
+    },
+    nord: {
+        name: "nord",
+        background: "#2e3440",
+        foreground: "#d8dee9",
+        cursor: "#d8dee9",
+        colors: {
+            "0": "#3b4252", "1": "#bf616a", "2": "#a3be8c", "3": "#ebcb8b",
+            "4": "#81a1c1", "5": "#b48ead", "6": "#88c0d0", "7": "#e5e9f0",
+            "8": "#4c566a", "9": "#bf616a", "10": "#a3be8c", "11": "#ebcb8b",
+            "12": "#81a1c1", "13": "#b48ead", "14": "#8fbcbb", "15": "#eceff4"
+        }
+    },
+    gruvbox: {
+        name: "gruvbox",
+        background: "#282828",
+        foreground: "#ebdbb2",
+        cursor: "#a89984",
+        colors: {
+            "0": "#282828", "1": "#cc241d", "2": "#98971a", "3": "#d79921",
+            "4": "#458588", "5": "#b16286", "6": "#689d6a", "7": "#a89984",
+            "8": "#928374", "9": "#fb4934", "10": "#b8bb26", "11": "#fabd2f",
+            "12": "#83a598", "13": "#d3869b", "14": "#8ec07c", "15": "#ebdbb2"
+        }
+    },
+    tokyonight: {
+        name: "tokyonight",
+        background: "#1a1b26",
+        foreground: "#a9b1d6",
+        cursor: "#c0caf5",
+        colors: {
+            "0": "#1d202f", "1": "#f7768e", "2": "#9ece6a", "3": "#e0af68",
+            "4": "#7aa2f7", "5": "#bb9af7", "6": "#7dcfff", "7": "#a9b1d6",
+            "8": "#414868", "9": "#f7768e", "10": "#9ece6a", "11": "#e0af68",
+            "12": "#7aa2f7", "13": "#bb9af7", "14": "#7dcfff", "15": "#c0caf5"
+        }
     }
 } as const satisfies Record<string, Theme>;
+
 
 /**
  * Union type of all available theme names (e.g., 'dracula', 'ubuntu').
