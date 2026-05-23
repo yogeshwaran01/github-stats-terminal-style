@@ -13,5 +13,8 @@
     "ps",
     "uptime",
     "exit"
-  ]
+  ],
+  "customCommands": {
+    "cat profile.txt": "A Chemical Engineer building software 😊"
+  }
 }
