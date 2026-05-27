@@ -8,6 +8,7 @@ import { GithubUserResolver } from "../resolvers/GithubUserResolver";
 import { Theme } from "../types/theme.types";
 import { loadConfig, loadConfigFromPath } from "../utils/file.utils";
 import { TerminalService } from "./TerminalService";
+import { RepoStatus } from "../types/github.types";
 
 /**
  * High-Level Orchestrator representing the complete three-stage SVG Stats Generator.
@@ -28,6 +29,30 @@ export class TerminalGeneratorEngine {
     public static async generate(username: string, token?: string, outputPath?: string, configPath?: string, sourceTypeOverride?: "user" | "repo"): Promise<void> {
         // --- Load & Parse Configuration ---
         const config = configPath ? loadConfigFromPath(configPath) : loadConfig();
+        
+        console.log(`[Stage 1/3] Loading configuration and resolving stats...`);
+        const styledSvg = await TerminalGeneratorEngine.generateSvgString(username, token, config, sourceTypeOverride);
+
+        console.log(`[Stage 3/3] Writing SVG to local storage...`);
+        // Save output to local filesystem
+        const finalPath = outputPath || path.resolve(process.cwd(), "github_stats.svg");
+        fs.writeFileSync(finalPath, styledSvg);
+
+        console.log(`✓ Terminal Stats SVG successfully compiled at: ${finalPath}`);
+    }
+
+    /**
+     * Generates and returns the styled SVG string directly in memory.
+     * Helpful for serverless API endpoints and web integration.
+     */
+    public static async generateSvgString(
+        username: string, 
+        token?: string, 
+        configOverride?: any, 
+        sourceTypeOverride?: "user" | "repo",
+        useMockData: boolean = false
+    ): Promise<string> {
+        const config = configOverride || loadConfig();
         const finalThemeName = (config.theme || "dracula") as ThemeName;
         const theme = THEMES[finalThemeName] || THEMES.dracula;
         const hostname = config.hostname || "github.com";
@@ -42,16 +67,73 @@ export class TerminalGeneratorEngine {
         // Check for target. If sourceTypeOverride is explicitly passed, prioritize the CLI username target.
         const target = sourceTypeOverride ? username : (config.target || username);
 
-        console.log(`[Stage 1/3] Resolving ${sourceType} data for target: ${target}...`);
-
         // --- Stage 1: Resolve Data ---
-        let resolver;
-        if (sourceType === "repo") {
-            resolver = new GithubRepoResolver();
+        let stats;
+        if (useMockData) {
+            if (sourceType === "repo") {
+                stats = {
+                    name: target.split("/")[1] || "github-stats-terminal-style",
+                    fullName: target,
+                    description: "Generate GitHub Stats in a retro-style terminal emulator interface!",
+                    stars: 128,
+                    forks: 32,
+                    watchers: 128,
+                    openIssues: 3,
+                    size: 2450,
+                    license: "MIT",
+                    createdAt: "2023-03-12T00:00:00Z",
+                    pushedAt: "2026-05-27T00:00:00Z",
+                    uptime: { years: 3, days: 76, since: "3 years, 76 days" },
+                    languages: [
+                        { name: "TypeScript", percentage: 84 },
+                        { name: "JavaScript", percentage: 12 },
+                        { name: "HTML", percentage: 4 }
+                    ],
+                    recentCommits: [
+                        { sha: "9f8a3d1", author: "yogeshwaran01", date: "2026-05-27", message: "feat: Add interactive playground builder" },
+                        { sha: "4b2e1f2", author: "yogeshwaran01", date: "2026-05-26", message: "refactor: Modularize graphics rendering engine" },
+                        { sha: "7d9c8e3", author: "yogeshwaran01", date: "2026-05-24", message: "chore: Update theme variables & palettes" }
+                    ]
+                };
+            } else {
+                stats = {
+                    name: "John Doe",
+                    bio: "Building the future of developer terminal cards 🚀",
+                    repoCount: 42,
+                    gistCount: 12,
+                    followersCount: 854,
+                    totalStars: 432,
+                    totalForks: 128,
+                    commitCount: 2450,
+                    issueCount: 89,
+                    prCount: 164,
+                    uptime: { years: 3, days: 142, since: "3 years, 142 days" },
+                    top_repos: [
+                        { name: "github-stats-terminal", stars: 254, forks: 43, language: "TypeScript" },
+                        { name: "portfoli-theme", stars: 102, forks: 12, language: "CSS" },
+                        { name: "react-lazy-loader", stars: 64, forks: 8, language: "JavaScript" }
+                    ],
+                    processes: [
+                        { name: "github-stats-terminal", status: RepoStatus.Running, lastActivity: "2 hours ago" },
+                        { name: "portfoli-theme", status: RepoStatus.Idle, lastActivity: "12 days ago" },
+                        { name: "react-lazy-loader", status: RepoStatus.Zombie, lastActivity: "412 days ago" }
+                    ],
+                    languages: [
+                        { name: "TypeScript", percentage: 84 },
+                        { name: "JavaScript", percentage: 12 },
+                        { name: "HTML", percentage: 4 }
+                    ]
+                };
+            }
         } else {
-            resolver = new GithubUserResolver();
+            let resolver;
+            if (sourceType === "repo") {
+                resolver = new GithubRepoResolver();
+            } else {
+                resolver = new GithubUserResolver();
+            }
+            stats = await resolver.resolve(target, token, config);
         }
-        const stats = await resolver.resolve(target, token, config);
 
         const context: CommandContext = {
             type: sourceType,
@@ -59,8 +141,6 @@ export class TerminalGeneratorEngine {
             stats,
             config
         };
-
-        console.log(`[Stage 2/3] Executing terminal commands sequence...`);
 
         // --- Stage 2: Generate Commands ---
         // Auto-scale terminal console height dynamically based on command length to look premium!
@@ -79,7 +159,6 @@ export class TerminalGeneratorEngine {
             height: terminalHeight
         });
 
-
         // Run commands dynamically from config arrays
         for (const cmdName of commandsList) {
             if (typeof cmdName !== "string") continue;
@@ -87,17 +166,9 @@ export class TerminalGeneratorEngine {
             await command.execute(terminal, context);
         }
 
-        console.log(`[Stage 3/3] Rendering SVG and decorating borders...`);
-
         // --- Stage 3: Render & Post-Process ---
         const rawSvg = terminal.render();
-        const styledSvg = TerminalGeneratorEngine.applyHeader(rawSvg, headerStyle, theme);
-
-        // Save output to local filesystem
-        const finalPath = outputPath || path.resolve(process.cwd(), "github_stats.svg");
-        fs.writeFileSync(finalPath, styledSvg);
-
-        console.log(`✓ Terminal Stats SVG successfully compiled at: ${finalPath}`);
+        return TerminalGeneratorEngine.applyHeader(rawSvg, headerStyle, theme);
     }
 
     /**

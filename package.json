@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "dev": "concurrently \"npm run build:watch\" \"nodemon\""
+    "dev:cli": "concurrently \"npm run build:watch\" \"nodemon\""
   },
   "bin": {
     "github-stats-terminal": "dist/bin/github-stats-terminal.js"
