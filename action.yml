@@ -1,0 +1,49 @@
+name: 'GitHub Stats Terminal Style'
+description: 'Generate Terminal-Style GitHub Stats SVG cards for your developer profile README'
+author: 'yogeshwaran01'
+branding:
+  icon: 'terminal'
+  color: 'purple'
+inputs:
+  username:
+    description: 'GitHub username to fetch stats for (defaults to repository owner)'
+    required: false
+    default: '${{ github.repository_owner }}'
+  token:
+    description: 'GitHub personal access token (GHT) for higher rate limits'
+    required: false
+    default: '${{ github.token }}'
+  theme:
+    description: 'Visual theme for the terminal window (e.g. dracula, tokyonight, catppuccin, nord)'
+    required: false
+    default: 'dracula'
+  headerStyle:
+    description: 'The style of the window header (mac, windows, retro)'
+    required: false
+    default: 'mac'
+  typingSpeed:
+    description: 'Simulated typing speed delay in milliseconds'
+    required: false
+    default: '80'
+  hostname:
+    description: 'Hostname prompt inside the shell prompt'
+    required: false
+    default: 'github.com'
+  commands:
+    description: 'Comma-separated list of commands to run (whoami, neofetch, languages, top-repos, git-log, ps, uptime, exit)'
+    required: false
+    default: 'whoami,neofetch,languages,uptime,exit'
+  outputPath:
+    description: 'The output file path relative to workspace root'
+    required: false
+    default: 'github_stats.svg'
+  sourceType:
+    description: 'Source type context (user or repo)'
+    required: false
+    default: 'user'
+  target:
+    description: 'Explicit target username or repository (owner/repo) override'
+    required: false
+runs:
+  using: 'node20'
+  main: 'dist/src/action/index.js'

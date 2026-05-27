@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Stats Terminal Configurator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Modern Glassmorphic Design System */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #020617 100%);
+            --panel-bg: rgba(30, 41, 59, 0.45);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --accent-glow: rgba(99, 102, 241, 0.35);
+            --success: #10b981;
+            --warning: #f59e0b;
+            
+            /* Dynamic Terminal Colors (Overwritten by JS) */
+            --term-bg: #282a36;
+            --term-fg: #f8f8f2;
+            --term-cursor: #f8f8f2;
+            --term-ansi-0: #21222c;
+            --term-ansi-2: #50fa7b;
+            --term-ansi-4: #bd93f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.6);
+        }
+
+        header {
+            padding: 2rem 4rem 1rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--panel-border);
+            backdrop-filter: blur(8px);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #f8fafc, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .badge {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Layout Grid */
+        .container {
+            display: grid;
+            grid-template-columns: 1.1fr 1.4fr;
+            gap: 2.5rem;
+            padding: 2.5rem 4rem;
+            flex-grow: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 20px;
+            backdrop-filter: blur(16px);
+            padding: 2rem;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input[type="text"], select {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        /* Command Checklist */
+        .command-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            background: rgba(15, 23, 42, 0.3);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* Dynamic Command Sequencing Styles */
+        .cmd-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            background: rgba(15, 23, 42, 0.3);
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .cmd-pill {
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            color: #a5b4fc;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.15s ease;
+        }
+
+        .cmd-pill:hover:not(:disabled) {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            box-shadow: 0 2px 8px var(--accent-glow);
+        }
+
+        .cmd-pill:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+
+        .active-cmd-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            transition: background 0.2s ease;
+        }
+
+        .active-cmd-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .active-cmd-name {
+            color: #38bdf8;
+            font-weight: 500;
+        }
+
+        .active-cmd-controls {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .cmd-ctrl-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            display: grid;
+            place-content: center;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.15s ease;
+        }
+
+        .cmd-ctrl-btn:hover:not(:disabled) {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .cmd-ctrl-btn:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+        }
+
+        /* Custom Commands Builder Section */
+        .custom-commands-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .custom-cmds-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .custom-cmd-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+        }
+
+        .custom-cmd-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .custom-cmd-info span:first-child {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #38bdf8;
+        }
+
+        .custom-cmd-info span:last-child {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 6px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-add-cmd {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            border-radius: 8px;
+            padding: 0.6rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .btn-add-cmd:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Radio Toggle Groups */
+        .radio-group {
+            display: flex;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 0.25rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .radio-label {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .radio-group input[type="radio"] {
+            display: none;
+        }
+
+        .radio-group input[type="radio"]:checked + .radio-label {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Slider */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        input[type="range"] {
+            flex-grow: 1;
+            appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-glow);
+            transition: transform 0.1s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .slider-val {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            min-width: 3rem;
+            text-align: right;
+        }
+
+        /* Preview Frame */
+        .preview-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            position: relative;
+            min-height: 500px;
+        }
+
+        .preview-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            z-index: 10;
+        }
+
+        .preview-badge::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 8px var(--success);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.5; }
+        }
+
+        /* SVG Live Image Preview style */
+        .svg-preview-element {
+            width: 100%;
+            height: auto;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Offline Fallback Terminal Window */
+        .terminal {
+            background-color: var(--term-bg);
+            color: var(--term-fg);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Fira Code', monospace;
+            text-align: left;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .terminal-header {
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            height: 40px;
+        }
+
+        .mac-dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .terminal-body {
+            padding: 1.25rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            min-height: 280px;
+        }
+
+        .prompt { color: var(--term-ansi-2); font-weight: bold; }
+        .prompt-host { color: var(--term-ansi-4); }
+
+        /* Integration Panel */
+        .integration-panel {
+            grid-column: span 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .code-container {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            position: relative;
+            min-height: 120px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: #38bdf8;
+        }
+
+        .copy-btn {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--accent-glow);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Success Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: -250px;
+            background: rgba(16, 185, 129, 0.95);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.show {
+            right: 2rem;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border-left-color: var(--accent);
+            animation: spin 1s linear infinite;
+            display: none;
+            position: absolute;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+            .integration-panel {
+                grid-column: span 1;
+                grid-template-columns: 1fr;
+            }
+            header {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-group">
+            <span class="logo-icon">$_</span>
+            <div class="logo-text">
+                <h1>GitHub Stats Terminal Style</h1>
+                <p>Interactive Terminal Playground & Embed Generator</p>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span class="badge">v2.0.0</span>
+            <span class="badge" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #6ee7b7;">Serverless Live Preview</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Configuration Control Panel -->
+        <div class="panel">
+            <div class="panel-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                Terminal Configuration
+            </div>
+            
+            <!-- Source Selection -->
+            <div class="form-group">
+                <label>Source Type</label>
+                <div class="radio-group">
+                    <input type="radio" name="sourceType" id="src-user" value="user" checked>
+                    <label for="src-user" class="radio-label">GitHub User Profile</label>
+                    
+                    <input type="radio" name="sourceType" id="src-repo" value="repo">
+                    <label for="src-repo" class="radio-label">GitHub Repository</label>
+                </div>
+            </div>
+
+            <!-- Target Input -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label id="target-label">GitHub Username</label>
+                    <input type="text" id="target" value="yogeshwaran01" placeholder="e.g. yogeshwaran01">
+                </div>
+                <div class="form-group">
+                    <label>Hostname Prompt</label>
+                    <input type="text" id="hostname" value="github.com" placeholder="e.g. github.com">
+                </div>
+            </div>
+
+            <!-- Theme & Header Style -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Visual Theme</label>
+                    <select id="theme">
+                        <option value="dracula" selected>Dracula</option>
+                        <option value="ubuntu">Ubuntu Terminal</option>
+                        <option value="hacker">Green Hacker</option>
+                        <option value="atom">Atom One Dark</option>
+                        <option value="powershell">MS PowerShell</option>
+                        <option value="monokai">Retro Monokai</option>
+                        <option value="github">GitHub Light/Classic</option>
+                        <option value="catppuccin">Catppuccin Macchiato</option>
+                        <option value="nord">Nord Frozen</option>
+                        <option value="gruvbox">Gruvbox Retro</option>
+                        <option value="tokyonight">Tokyo Night</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Window Style</label>
+                    <select id="headerStyle">
+                        <option value="mac" selected>macOS Traffic Lights</option>
+                        <option value="windows">Windows Command Prompt</option>
+                        <option value="retro">Borderless Retro</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Typing Speed -->
+            <div class="form-group">
+                <label>Typing Speed Simulation</label>
+                <div class="slider-container">
+                    <input type="range" id="typingSpeed" min="20" max="250" value="80">
+                    <span class="slider-val"><span id="speed-val">80</span>ms</span>
+                </div>
+            </div>
+
+            <!-- Command Sequence -->
+            <div class="form-group">
+                <label>Available Commands Pool (Click to add)</label>
+                <div class="cmd-pool" id="available-commands-pool">
+                    <!-- Dynamic Built-in Commands pills go here -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Active Command Sequence (Reorder & Remove)</label>
+                <div id="active-commands-list" style="display: flex; flex-direction: column; gap: 0.5rem; background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); max-height: 250px; overflow-y: auto;">
+                    <!-- Dynamic Active Command items with move up/down/delete buttons go here -->
+                </div>
+            </div>
+
+            <!-- Custom Command Builder -->
+            <div class="form-group">
+                <label>Build Custom Commands</label>
+                <div class="custom-commands-container">
+                    <div class="form-row">
+                        <input type="text" id="custom-cmd-key" placeholder="Command (e.g. cat bio)">
+                        <input type="text" id="custom-cmd-val" placeholder="Printed output string">
+                    </div>
+                    <button class="btn-add-cmd" id="btn-add-custom-cmd">+ Add Custom Command</button>
+                    <div class="custom-cmds-list" id="custom-cmds-list-elements">
+                        <!-- Custom commands generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terminal Live Preview Simulator -->
+        <div class="preview-container">
+            <div class="preview-badge">Genuine SVG Live Engine Preview</div>
+            
+            <div class="spinner" id="preview-loader"></div>
+            
+            <!-- Real Dynamic SVG returned by Serverless mock stats API -->
+            <img id="real-svg-preview" class="svg-preview-element" src="" alt="Terminal SVG Preview" style="display:none;">
+
+            <!-- Local HTML/CSS fallback if running directly offline -->
+            <div class="terminal" id="terminal-mock">
+                <div class="terminal-header" id="term-header-bar">
+                    <div class="mac-dots" id="dots-container">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                </div>
+                <div class="terminal-body" id="term-body-content">
+                    <!-- Local Prompt text elements -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Export & Integrations panel -->
+        <div class="integration-panel">
+            <div class="panel" style="gap: 1rem;">
+                <div class="panel-title" style="justify-content: space-between;">
+                    <span style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--success);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        config.json Configuration
+                    </span>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="copy-btn" id="copy-json-btn" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #6ee7b7;">Copy</button>
+                        <button class="copy-btn" id="download-config-btn" style="padding: 0.4rem 0.6rem;" title="Download config.json">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="code-container" id="json-code-block" style="color: #6ee7b7; max-height: 120px;">
+                    <!-- config.json filled by JS -->
+                </div>
+            </div>
+
+            <div class="panel" style="gap: 1rem;">
+                <div class="panel-title" style="justify-content: space-between;">
+                    <span style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #38bdf8;"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+                        README Markdown Embed URL
+                    </span>
+                    <button class="copy-btn" id="copy-markdown-btn">Copy</button>
+                </div>
+                <div class="code-container" id="markdown-code-block">
+                    <!-- Markdown Embed URL filled by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Success Alert -->
+    <div class="toast" id="success-toast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span id="toast-message">Copied successfully!</span>
+    </div>
+
+    <script>
+        // DOM References
+        const elements = {
+            sourceType: document.getElementsByName('sourceType'),
+            target: document.getElementById('target'),
+            targetLabel: document.getElementById('target-label'),
+            hostname: document.getElementById('hostname'),
+            theme: document.getElementById('theme'),
+            headerStyle: document.getElementById('headerStyle'),
+            typingSpeed: document.getElementById('typingSpeed'),
+            speedVal: document.getElementById('speed-val'),
+            
+            // Reorder panels
+            poolContainer: document.getElementById('available-commands-pool'),
+            activeContainer: document.getElementById('active-commands-list'),
+            
+            terminalMock: document.getElementById('terminal-mock'),
+            termBody: document.getElementById('term-body-content'),
+            markdownBlock: document.getElementById('markdown-code-block'),
+            jsonBlock: document.getElementById('json-code-block'),
+            downloadBtn: document.getElementById('download-config-btn'),
+            copyBtn: document.getElementById('copy-markdown-btn'),
+            copyJsonBtn: document.getElementById('copy-json-btn'),
+            toast: document.getElementById('success-toast'),
+            toastMsg: document.getElementById('toast-message'),
+            
+            // Custom Commands references
+            customCmdKey: document.getElementById('custom-cmd-key'),
+            customCmdVal: document.getElementById('custom-cmd-val'),
+            btnAddCustomCmd: document.getElementById('btn-add-custom-cmd'),
+            customCmdsList: document.getElementById('custom-cmds-list-elements'),
+            
+            // Live Preview elements
+            previewImg: document.getElementById('real-svg-preview'),
+            previewLoader: document.getElementById('preview-loader')
+        };
+
+        // App state
+        let config = {
+            sourceType: 'user',
+            target: 'yogeshwaran01',
+            hostname: 'github.com',
+            theme: 'dracula',
+            headerStyle: 'mac',
+            typingSpeed: 80,
+            commands: ['whoami', 'neofetch', 'languages', 'uptime', 'exit'],
+            customCommands: {}
+        };
+
+        // Register event handlers
+        function init() {
+            // Source type radio toggles
+            elements.sourceType.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    config.sourceType = e.target.value;
+                    if (config.sourceType === 'repo') {
+                        elements.targetLabel.innerText = "GitHub Repository";
+                        elements.target.value = "yogeshwaran01/github-stats-terminal-style";
+                    } else {
+                        elements.targetLabel.innerText = "GitHub Username";
+                        elements.target.value = "yogeshwaran01";
+                    }
+                    config.target = elements.target.value;
+                    updateUI();
+                });
+            });
+
+            // Text Inputs
+            elements.target.addEventListener('input', (e) => {
+                config.target = e.target.value;
+                updateUI();
+            });
+            elements.hostname.addEventListener('input', (e) => {
+                config.hostname = e.target.value;
+                updateUI();
+            });
+
+            // Select Toggles
+            elements.theme.addEventListener('change', (e) => {
+                config.theme = e.target.value;
+                updateUI();
+            });
+            elements.headerStyle.addEventListener('change', (e) => {
+                config.headerStyle = e.target.value;
+                updateUI();
+            });
+
+            // Typing Speed range
+            elements.typingSpeed.addEventListener('input', (e) => {
+                config.typingSpeed = parseInt(e.target.value);
+                elements.speedVal.innerText = config.typingSpeed;
+                updateMarkdown();
+                triggerApiPreview();
+            });
+
+            // Custom Commands handler
+            elements.btnAddCustomCmd.addEventListener('click', addCustomCommand);
+
+            // Downloads and Clipboard
+            elements.downloadBtn.addEventListener('click', downloadConfig);
+            elements.copyBtn.addEventListener('click', copyMarkdownToClipboard);
+            elements.copyJsonBtn.addEventListener('click', copyJsonToClipboard);
+
+            // Initial UI compilation
+            updateUI();
+        }
+
+        function updateUI() {
+            renderCommandSequencer();
+            renderCustomCommandsList();
+            renderSimulatedOutputFallback();
+            updateJsonBlock();
+            updateMarkdown();
+            triggerApiPreview();
+        }
+
+        // Render reactive generated config.json
+        function updateJsonBlock() {
+            const configData = {
+                theme: config.theme,
+                headerStyle: config.headerStyle,
+                hostname: config.hostname,
+                typingSpeed: config.typingSpeed,
+                sourceType: config.sourceType,
+                target: config.target,
+                commands: config.commands,
+                customCommands: config.customCommands
+            };
+            elements.jsonBlock.innerText = JSON.stringify(configData, null, 2);
+        }
+
+        // Render Available Pool and Active Orderable Sequence lists
+        function renderCommandSequencer() {
+            // 1. Available Pool of built-ins
+            const builtIns = ['whoami', 'neofetch', 'languages', 'top-repos', 'git-log', 'ps', 'uptime', 'exit'];
+            elements.poolContainer.innerHTML = '';
+            
+            builtIns.forEach(cmd => {
+                const btn = document.createElement('button');
+                btn.className = 'cmd-pill';
+                btn.innerText = cmd;
+                btn.disabled = config.commands.includes(cmd);
+                btn.addEventListener('click', () => addCommandToActive(cmd));
+                elements.poolContainer.appendChild(btn);
+            });
+
+            // 2. Active Sequence vertical list
+            elements.activeContainer.innerHTML = '';
+            if (config.commands.length === 0) {
+                elements.activeContainer.innerHTML = `<span style="font-size:0.8rem; color:var(--text-secondary); opacity:0.7; text-align:center;">No commands in sequence. Click available pool or add custom commands to build!</span>`;
+                return;
+            }
+
+            config.commands.forEach((cmd, idx) => {
+                const row = document.createElement('div');
+                row.className = 'active-cmd-item';
+                
+                const label = document.createElement('span');
+                label.className = 'active-cmd-name';
+                label.innerText = `${idx + 1}. ${cmd}`;
+
+                const controls = document.createElement('div');
+                controls.className = 'active-cmd-controls';
+
+                // Up control button (▲)
+                const upBtn = document.createElement('button');
+                upBtn.className = 'cmd-ctrl-btn';
+                upBtn.innerHTML = '▲';
+                upBtn.title = "Move Up";
+                upBtn.disabled = idx === 0;
+                upBtn.addEventListener('click', () => moveCommand(idx, -1));
+
+                // Down control button (▼)
+                const downBtn = document.createElement('button');
+                downBtn.className = 'cmd-ctrl-btn';
+                downBtn.innerHTML = '▼';
+                downBtn.title = "Move Down";
+                downBtn.disabled = idx === config.commands.length - 1;
+                downBtn.addEventListener('click', () => moveCommand(idx, 1));
+
+                // Delete control button (×)
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'cmd-ctrl-btn';
+                removeBtn.style.color = '#f87171';
+                removeBtn.innerHTML = '×';
+                removeBtn.title = "Remove";
+                removeBtn.addEventListener('click', () => removeActiveCommand(idx));
+
+                controls.appendChild(upBtn);
+                controls.appendChild(downBtn);
+                controls.appendChild(removeBtn);
+
+                row.appendChild(label);
+                row.appendChild(controls);
+                elements.activeContainer.appendChild(row);
+            });
+        }
+
+        // Swaps command orders in-place inside the configuration state array
+        function moveCommand(idx, offset) {
+            const targetIdx = idx + offset;
+            if (targetIdx < 0 || targetIdx >= config.commands.length) return;
+            
+            // Swap array values
+            const temp = config.commands[idx];
+            config.commands[idx] = config.commands[targetIdx];
+            config.commands[targetIdx] = temp;
+            
+            updateUI();
+        }
+
+        // Removes a command from active pipeline sequence
+        function removeActiveCommand(idx) {
+            config.commands.splice(idx, 1);
+            updateUI();
+        }
+
+        // Appends a new command to sequence right before 'exit' if exit is active
+        function addCommandToActive(cmd) {
+            if (config.commands.includes(cmd)) return;
+            
+            const exitIdx = config.commands.indexOf('exit');
+            if (exitIdx !== -1) {
+                config.commands.splice(exitIdx, 0, cmd);
+            } else {
+                config.commands.push(cmd);
+            }
+            
+            updateUI();
+        }
+
+        // Add a new custom command mapped string
+        function addCustomCommand() {
+            const key = elements.customCmdKey.value.trim();
+            const val = elements.customCmdVal.value.trim();
+            
+            if (!key || !val) {
+                alert("Please enter both a custom command string and its output text!");
+                return;
+            }
+
+            if (config.commands.includes(key) || ['whoami', 'neofetch', 'languages', 'top-repos', 'git-log', 'ps', 'uptime', 'exit'].includes(key)) {
+                alert("This command name conflicts with a built-in command!");
+                return;
+            }
+
+            config.customCommands[key] = val;
+            
+            // Add custom command to list of active commands in sequence order
+            if (!config.commands.includes(key)) {
+                // Add right before exit if present
+                const exitIdx = config.commands.indexOf('exit');
+                if (exitIdx !== -1) {
+                    config.commands.splice(exitIdx, 0, key);
+                } else {
+                    config.commands.push(key);
+                }
+            }
+
+            elements.customCmdKey.value = '';
+            elements.customCmdVal.value = '';
+            
+            updateUI();
+        }
+
+        // Delete a custom command mapping
+        function deleteCustomCommand(key) {
+            delete config.customCommands[key];
+            config.commands = config.commands.filter(c => c !== key);
+            updateUI();
+        }
+
+        // Render custom commands listings inside UI configuration builder panel
+        function renderCustomCommandsList() {
+            elements.customCmdsList.innerHTML = '';
+            const entries = Object.entries(config.customCommands);
+            
+            if (entries.length === 0) {
+                elements.customCmdsList.innerHTML = `<span style="font-size:0.8rem; color:var(--text-secondary); opacity:0.7; text-align:center;">No custom commands built yet.</span>`;
+                return;
+            }
+
+            entries.forEach(([key, val]) => {
+                const row = document.createElement('div');
+                row.className = 'custom-cmd-entry';
+                row.innerHTML = `
+                    <div class="custom-cmd-info">
+                        <span>$ ${key}</span>
+                        <span>${val.substring(0, 30)}${val.length > 30 ? '...' : ''}</span>
+                    </div>
+                    <button class="btn-delete" onclick="deleteCustomCommand('${key}')">Delete</button>
+                `;
+                elements.customCmdsList.appendChild(row);
+            });
+        }
+
+        // Fetches real SVG preview from Mock Serverless API endpoint
+        let debounceTimer;
+        function triggerApiPreview() {
+            clearTimeout(debounceTimer);
+            elements.previewLoader.style.display = 'block';
+
+            debounceTimer = setTimeout(() => {
+                // Use relative routing if running on HTTP(S) serverless hosts
+                let apiBase = window.location.origin;
+                
+                // If running locally from file system directly, fall back to hosted endpoint or keep HTML simulator
+                if (window.location.protocol === 'file:') {
+                    apiBase = 'https://github-stats-terminal.vercel.app';
+                }
+
+                const queryParams = new URLSearchParams({
+                    username: config.target,
+                    theme: config.theme,
+                    headerStyle: config.headerStyle,
+                    typingSpeed: config.typingSpeed,
+                    hostname: config.hostname,
+                    commands: config.commands.join(','),
+                    mock: 'true' // Always request mock-ready data card!
+                });
+
+                if (config.sourceType === 'repo') {
+                    queryParams.set('sourceType', 'repo');
+                    queryParams.set('target', config.target);
+                }
+
+                if (Object.keys(config.customCommands).length > 0) {
+                    queryParams.set('customCommands', JSON.stringify(config.customCommands));
+                }
+
+                const previewUrl = `${apiBase}/api/stats?${queryParams.toString().replace(/\+/g, '%20')}`;
+                
+                // Update Image source
+                elements.previewImg.src = previewUrl;
+                elements.previewImg.style.display = 'block';
+                elements.terminalMock.style.display = 'none'; // Hide HTML mockup!
+                
+                elements.previewImg.onload = () => {
+                    elements.previewLoader.style.display = 'none';
+                };
+
+                elements.previewImg.onerror = () => {
+                    elements.previewLoader.style.display = 'none';
+                    elements.previewImg.style.display = 'none';
+                    elements.terminalMock.style.display = 'flex'; // Fail gracefully and show local mockup
+                };
+            }, 300);
+        }
+
+        // Simulates a text prompt fallback inside the local HTML mockup container (offline capability)
+        function renderSimulatedOutputFallback() {
+            elements.termBody.innerHTML = '';
+            
+            const promptUser = config.sourceType === 'repo' ? config.target.split('/')[0] || 'username' : config.target;
+            const promptStr = `<span class="prompt">${promptUser}@<span class="prompt-host">${config.hostname}</span>:~$</span>`;
+
+            config.commands.forEach(cmd => {
+                // Command input line
+                const cmdLine = document.createElement('div');
+                cmdLine.innerHTML = `${promptStr} ${cmd}`;
+                elements.termBody.appendChild(cmdLine);
+
+                // Command output
+                const outLine = document.createElement('div');
+                outLine.className = 'output-block';
+
+                if (config.customCommands[cmd]) {
+                    outLine.innerText = config.customCommands[cmd];
+                } else if (cmd === 'whoami') {
+                    outLine.innerText = promptUser;
+                } else if (cmd === 'neofetch') {
+                    outLine.innerText = `OS: GitHub Profile Stats\nShell: Terminal-Style v2.0.0`;
+                } else if (cmd === 'languages') {
+                    outLine.innerText = `TypeScript [██████████████░░] 84%\nJavaScript [██░░░░░░░░░░░░░░] 12%`;
+                } else if (cmd === 'exit') {
+                    outLine.innerText = `[Process completed]`;
+                } else {
+                    outLine.innerText = `Simulated command response.`;
+                }
+
+                elements.termBody.appendChild(outLine);
+            });
+        }
+
+        // Compiles markdown embed URL dynamically based on selection state
+        function updateMarkdown() {
+            let apiBase = window.location.origin;
+            if (window.location.protocol === 'file:') {
+                apiBase = 'https://github-stats-terminal.vercel.app';
+            }
+            
+            const queryParams = new URLSearchParams({
+                username: config.target,
+                theme: config.theme,
+                headerStyle: config.headerStyle,
+                typingSpeed: config.typingSpeed,
+                hostname: config.hostname,
+                commands: config.commands.join(',')
+            });
+
+            if (config.sourceType === 'repo') {
+                queryParams.set('sourceType', 'repo');
+                queryParams.set('target', config.target);
+            }
+
+            if (Object.keys(config.customCommands).length > 0) {
+                queryParams.set('customCommands', JSON.stringify(config.customCommands));
+            }
+
+            const embedUrl = `${apiBase}/api/stats?${queryParams.toString().replace(/\+/g, '%20')}`;
+            const markdownEmbed = `[![GitHub Stats Terminal](${embedUrl})](${config.sourceType === 'repo' ? 'https://github.com/' + config.target : 'https://github.com/' + config.target})`;
+            
+            elements.markdownBlock.innerText = markdownEmbed;
+        }
+
+        // Trigger dynamic JSON config download
+        function downloadConfig() {
+            const configData = {
+                theme: config.theme,
+                headerStyle: config.headerStyle,
+                hostname: config.hostname,
+                typingSpeed: config.typingSpeed,
+                sourceType: config.sourceType,
+                target: config.target,
+                commands: config.commands,
+                customCommands: config.customCommands
+            };
+
+            const jsonStr = JSON.stringify(configData, null, 2);
+            const blob = new Blob([jsonStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = config.sourceType === 'repo' ? 'repo_stats.json' : 'user_profile.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast("config.json exported successfully! 📁");
+        }
+
+        // Copies the computed markdown code block to client clipboard
+        function copyMarkdownToClipboard() {
+            const codeText = elements.markdownBlock.innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                showToast("Markdown copied to clipboard! 📋");
+            }).catch(err => {
+                console.error("Could not copy text: ", err);
+                showToast("Error copying code! ❌");
+            });
+        }
+
+        // Copies the compiled JSON text block to client clipboard
+        function copyJsonToClipboard() {
+            const codeText = elements.jsonBlock.innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                showToast("config.json copied to clipboard! 📋");
+            }).catch(err => {
+                console.error("Could not copy JSON: ", err);
+                showToast("Error copying JSON! ❌");
+            });
+        }
+
+        function showToast(message) {
+            elements.toastMsg.innerText = message;
+            elements.toast.classList.add('show');
+            setTimeout(() => {
+                elements.toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize application on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
