@@ -3,23 +3,46 @@ import path = require('path');
 
 /**
  * Loads a logo from a file and applies color.
+ * Supports absolute resolution, relative path detection, and built-in fallback.
  * @param filePath Path to the logo file.
  * @param color ANSI color code to apply.
  * @returns Array of colored strings.
  */
 export function loadLogo(filePath: string, color: string): string[] {
     try {
-        // Resolve path relative to CWD to match original behavior, 
-        // or check if it exists. 
-        // Original code used 'assets/github_art.txt' directly.
-        return fs
-            .readFileSync(filePath, 'utf-8')
-            .split('\n')
-            .map(line => `${color}${line}`);
+        // 1. Try to resolve path relative to process.cwd() or absolute path
+        let resolvedPath = path.isAbsolute(filePath) ? filePath : path.resolve(process.cwd(), filePath);
+        
+        // 2. Fallback: try resolving relative to the directory of this file (handles bundling differences)
+        if (!fs.existsSync(resolvedPath)) {
+            resolvedPath = path.resolve(__dirname, '../../', filePath);
+        }
+        
+        if (fs.existsSync(resolvedPath)) {
+            return fs
+                .readFileSync(resolvedPath, 'utf-8')
+                .split('\n')
+                .map(line => `${color}${line}`);
+        }
     } catch (error) {
         console.error(`Error loading logo from ${filePath}:`, error);
-        return [];
     }
+    
+    // 3. Robust Ultimate Fallback: Return standard GitHub Octocat ASCII art colored cleanly
+    const fallbackLogo = [
+        "          ████████          ",
+        "       ██████████████       ",
+        "     ███  ████████  ███     ",
+        "    ████            ████    ",
+        "    ████            ████    ",
+        "    ███              ███    ",
+        "    ████            ████    ",
+        "    █████          █████    ",
+        "     ██ ████    ███████     ",
+        "      ██         █████      ",
+        "         ██      ██         "
+    ];
+    return fallbackLogo.map(line => `${color}${line}`);
 }
 
 

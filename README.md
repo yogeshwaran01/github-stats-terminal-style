@@ -24,7 +24,7 @@ The absolute fastest way to display your live terminal statistics is via our hos
 Simply copy the markdown below and paste it into your README:
 
 ```markdown
-[![GitHub Stats Terminal](https://github-stats-terminal.vercel.app/api/stats?username=your-username&theme=tokyonight)](https://github.com/your-username)
+[![GitHub Stats Terminal](https://github-stats-terminal-style-five.vercel.app/api/stats?username=your-username&theme=tokyonight)](https://github.com/your-username)
 ```
 
 > [!TIP]
@@ -42,7 +42,7 @@ Simply copy the markdown below and paste it into your README:
 
 Want to design your terminal card interactively? Use our **Visual Web Configurator** to custom-build your card in your browser!
 
-> **✨ [Launch the Visual Web Playground](https://github-stats-terminal.vercel.app/)**
+> **✨ [Launch the Visual Web Playground](https://github-stats-terminal-style-five.vercel.app/)**
 >
 > - Toggle visuals, border controls, speeds, and hostnames in a beautiful dark glassmorphic UI.
 > - **Interactive Command Reordering:** Drag, drop, and rearrange execution sequences (Move ▲ / Move ▼).
