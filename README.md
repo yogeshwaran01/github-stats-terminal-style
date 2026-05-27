@@ -51,6 +51,82 @@ Want to design your terminal card interactively? Use our **Visual Web Configurat
 
 ---
 
+## 📦 GitHub Actions Workflow Integration
+
+You can integrate this stats card generator into any of your existing repository workflows (e.g., to automatically commit the terminal stats SVG card directly to your project or profile README branch).
+
+Create a file named `.github/workflows/github-stats.yml` in your target repository:
+
+```yaml
+name: Update Terminal Stats Card
+
+on:
+  schedule:
+    # Run once every 24 hours at midnight
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows manual execution from the Actions tab
+
+permissions:
+  contents: write # Required to push the updated SVG back to the repo
+
+jobs:
+  build-stats:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      # Step 2: Compile the SVG Card using our Action
+      - name: Generate SVG Terminal Stats Card
+        uses: yogeshwaran01/github-stats-terminal-style@master
+        with:
+          username: ${{ github.repository_owner }}
+          theme: tokyonight
+          headerStyle: mac
+          commands: whoami,neofetch,languages,uptime,exit
+          outputPath: assets/github_stats.svg
+
+      # Step 3: Commit and Push the updated SVG card back to repository
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/github_stats.svg
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update terminal stats card [skip ci]" && git push)
+```
+
+Inside your `README.md`, you can then embed the compiled card statically:
+```markdown
+![My GitHub Terminal Stats](assets/github_stats.svg)
+```
+
+---
+
+### 🛠️ Input Options Configurations
+
+Customize the Action behavior using the following parameter options (`with:`):
+
+| Parameter | Description | Default | Example |
+| :--- | :--- | :--- | :--- |
+| `username` | The GitHub username to gather profile statistics. | `${{ github.repository_owner }}` | `yogeshwaran01` |
+| `token` | Access Token used to authenticate. Higher API rates. | `${{ github.token }}` | `${{ secrets.GHT }}` |
+| `theme` | Visual color palette theme. | `dracula` | `tokyonight`, `catppuccin`, `nord`, `gruvbox` |
+| `headerStyle`| Styling of window decoration borders. | `mac` | `mac`, `windows`, `retro` |
+| `typingSpeed`| Keypress simulation speed in milliseconds. | `80` | `100` |
+| `hostname` | Simulated custom hostname in command prompts. | `github.com` | `archlinux` |
+| `commands` | Comma-separated list of terminal prompts to run. | `whoami,neofetch,languages,uptime,exit` | `whoami,neofetch,languages,top-repos,ps,exit` |
+| `outputPath` | Target path where the final SVG card is saved. | `github_stats.svg` | `assets/terminal_stats.svg` |
+| `sourceType` | Stats target context (`user` or `repo`). | `user` | `repo` |
+| `target` | Explicit username or `owner/repo` override target. | `${{ github.repository_owner }}` | `yogeshwaran01/github-stats-terminal-style` |
+
+---
+
+
 ## 🛠️ Production Setup Guides
 
 If you prefer to automate SVG rendering inside your repository workflows or self-host your own high-capacity serverless API, choose from the integration options below:
@@ -76,21 +152,6 @@ This runs high-capacity compilation inside a repository workflow and writes the 
 ### Option B: Host Your Own Serverless API on Vercel
 
 Want custom backend control with unlimited API endpoints? Read the [Vercel Deployment Guide](docs/vercel-deployment.md) to launch your own rate-limit-free serverless proxy in 2 steps!
-
-### Option C: Repository Stats Mode
-
-To track statistics for a specific repository instead of a user profile (e.g., repository stars, byte breakdown, and the 5 most recent git commits):
-Create a `.github-stats-config.json` in your repository root:
-
-```json
-{
-  "sourceType": "repo",
-  "target": "your-username/your-repository-name",
-  "theme": "tokyonight",
-  "headerStyle": "windows",
-  "commands": ["whoami", "neofetch", "languages", "git-log", "uptime", "exit"]
-}
-```
 
 ---
 
